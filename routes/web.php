@@ -33,6 +33,31 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //<!-- Academic Search -->
+    Route::get('/update_ac', function () {
+        return Inertia::render('Academic/AcademicUpdate');
+    })->name('actualizar_academico');
+
+    Route::get('/look_ac', function () {
+        return Inertia::render('Academic/AcademicSearch');
+    })->name('buscar_academico');
+
+    Route::get('/add_ac', function () {
+        return Inertia::render('Academic/AcademicAdd');
+    })->name('agregar_academico');
+
+    // <!-- Administrative Search -->
+    Route::get('/update_ad', function () {
+        return Inertia::render('Administrative/AdministrativeUpdate');
+    })->name('actualizar_administrativo');
+
+    Route::get('/look_ad', function () {
+        return Inertia::render('Administrative/AdministrativeSearch');
+    })->name('buscar_administrativo');
+
+    Route::get('/add_ad', function () {
+        return Inertia::render('Administrative/AdministrativeAdd');
+    })->name('agregar_administrativo');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
