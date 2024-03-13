@@ -1,0 +1,97 @@
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Models\DocAlumno;
+use App\Models\Alumno;
+use App\Models\DocAcad;
+use App\Models\documento;
+
+class DocumentAcademicController extends Controller
+{
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'dni' => 'required|numeric',
+            'nombre' => 'required|string',
+            'carrera' => 'required|string',
+            'grado' => 'required|string',
+            'tipo' => 'required|string',
+            'documento' => 'required|file',
+            'caja' => 'required|string',
+            'observaciones' => 'nullable|string'
+        ]);
+        //Datos para la tabla de documento
+        $codigo_doc = $this->generateUniqueCode('DOC', 'documento', 'cod_doc');
+
+        $documento = new documento([
+            'cod_doc' => $codigo_doc,
+            'fecha' => Carbon::now(),
+            'tipo' => $request->input('tipo')
+        ]);
+        $documento->save();
+        //-------------------------
+
+        //Datos para la tabla de doc_acad
+        $doc_acad = $this->generateUniqueCode('ACAD', 'doc_acad', 'cod_acad');
+
+        $academico = new docAcad([
+            'cod_acad' => $doc_acad,
+            'cod_doc' => $documento->cod_doc,
+            'fecha' => Carbon::now()
+        ]);
+        $academico->save();
+        //-------------------------
+        //datos de alumno
+        $dni = $request->input('dni');
+        $nombre = $request->input('nombre');
+        $carrera = $request->input('carrera');
+        $alumno = new Alumno([
+            'dni' => $dni,
+            'nombre' => $nombre,
+            'carrera' => $carrera,
+        ]);
+        $alumno->save();
+        //--------------
+        //datos de doc_alumno
+        $tipo = $request->input('tipo');
+        $grado = $request->input('grado');
+        $documento = $request->file('documento');
+        $caja = $request->input('caja');
+        $observaciones = $request->input('observaciones');
+        $path = 'academicos/' . $dni . '/';
+        $ruta = $documento->storeAs($path, 'Doc' . $dni . $tipo . $grado . '.pdf');
+        $docAlum = new DocAlumno([
+
+            'dni' => $dni,
+            'grado' => $grado,
+            'tipo' => $tipo,
+            'ruta' => $ruta, 
+            'caja' => $caja,
+            'observaciones' => $observaciones
+        ]);
+        $docAlum->save();
+        //-------------------------
+        return response()->json([
+            'message' => 'File uploaded successfully',
+            'data' => $docAlum
+        ], 201);
+    }
+    private function generateUniqueCode($prefix, $table, $field)
+    {
+        // Obtener el último código en la base de datos y generar el siguiente
+        // Este es un esquema básico y deberá mejorarse para garantizar la unicidad y evitar colisiones
+        $lastCode = DB::table($table)->where($field, 'LIKE', $prefix . '%')->max($field);
+
+        if ($lastCode) {
+            $number = intval(substr($lastCode, strlen($prefix))) + 1;
+        } else {
+            $number = 1;
+        }
+
+        return $prefix . str_pad($number, 6, '0', STR_PAD_LEFT);
+    }
+}

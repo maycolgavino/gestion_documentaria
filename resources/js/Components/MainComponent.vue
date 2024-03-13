@@ -5,13 +5,12 @@
             <v-list lines="two">
                 <v-list-item prepend-icon="mdi-school" title="Búsqueda Académica">
                     <template v-slot:subtitle>
-                        <span class="font-weight-bold">Ali Connors</span> &mdash; I'll be in your neighborhood doing
-                        errands this weekend. Do you want to hang out?
+                        <span class="font-weight-bold">Documentos Academicos</span> &mdash; Aquí es donde podrás buscar y agregar datos de alumnos y sus documentos
                         <div>
-                            <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ac')">
+                            <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ac')">
                                 Actualizar
                                 <v-icon end icon="mdi-note-edit"></v-icon>
-                            </v-btn>
+                            </v-btn> -->
                             <v-btn class="ma-2" color="white" @click="redirectTo('agregar_ac')">
                                 Agregar
                                 <v-icon end icon="mdi-pencil"></v-icon>
@@ -33,14 +32,14 @@
                     </template>
 
                     <template v-slot:subtitle>
-                        <span class="font-weight-bold">to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but
-                        I'm out of town this weekend.
+                        <span class="font-weight-bold">Resoluciones Administrativas</span> &mdash; Aquí es donde se buscará y agregará datos de 
+                        Resoluciones Administrativas
                         <v-card-text>
                             <div>
-                                <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ad')">
+                                <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ad')">
                                     Actualizar
                                     <v-icon end icon="mdi-note-edit"></v-icon>
-                                </v-btn>
+                                </v-btn> -->
                                 <v-btn class="ma-2" color="white" @click="redirectTo('agregar_ad')">
                                     Agregar
                                     <v-icon end icon="mdi-pencil"></v-icon>
@@ -52,6 +51,39 @@
                             </div>
                         </v-card-text>
                     </template>
+                </v-list-item>
+
+                <v-divider ></v-divider>
+
+                <v-list-item prepend-icon="mdi-note-text-outline">
+
+                    <template v-slot:title>
+                        Búsqueda Sílabos Academicos
+                    </template>
+
+                    <template v-slot:subtitle>
+                        <span class="font-weight-bold">Silabos Académicos</span> &mdash; Aquí se encontrarán y 
+                        agregarán datos de Sílabos Académicos
+                        
+                        <v-card-text>
+                            <div>
+                                <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_sb')">
+                                    Actualizar
+                                    <v-icon end icon="mdi-note-edit"></v-icon>
+                                </v-btn> -->
+                                <v-btn class="ma-2" color="white" @click="redirectTo('agregar_sb')">
+                                    Agregar
+                                    <v-icon end icon="mdi-pencil"></v-icon>
+                                </v-btn>
+                                <v-btn class="ma-2" color="white" @click="redirectTo('busqueda_sb')">
+                                    Búsqueda
+                                    <v-icon end icon="mdi-clipboard-text-search"></v-icon>
+                                </v-btn>
+                            </div>
+                        </v-card-text>
+                    </template>
+
+
                 </v-list-item>
             </v-list>
         </v-card>
@@ -81,6 +113,16 @@ export default {
                     break;
                 case 'busqueda_ad':
                     window.location.href = '/look_ad'; // Reemplaza con la ruta de Laravel
+                    break;
+
+                case 'actualizar_sb':
+                    window.location.href = '/update_sb'; // Reemplaza con la ruta de Laravel
+                    break;
+                case 'agregar_sb':
+                    window.location.href = '/add_sb'; // Reemplaza con la ruta de Laravel
+                    break;
+                case 'busqueda_sb':
+                    window.location.href = '/look_sb'; // Reemplaza con la ruta de Laravel
                     break;
             }
         },

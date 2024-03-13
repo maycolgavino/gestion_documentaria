@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use App\Http\Controllers\DocumentAcademicController;
+use App\Http\Controllers\SyllabusController;
+use App\Http\Controllers\AdministrativeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,11 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/look_ac', function () {
         return Inertia::render('Academic/AcademicSearch');
     })->name('buscar_academico');
+    Route::get('/acad_details', [DocumentAcademicController::class, 'getAcadDetails']);
+    Route::get('/acad_download/{id}', [DocumentAcademicController::class, 'downloadAcadDocument']);
+
 
     Route::get('/add_ac', function () {
         return Inertia::render('Academic/AcademicAdd');
     })->name('agregar_academico');
-
+    Route::post('/register-student', [DocumentAcademicController::class, 'registerStudent']);
+    Route::post('/upload-documents', [DocumentAcademicController::class, 'uploadDocuments']);
     // <!-- Administrative Search -->
     Route::get('/update_ad', function () {
         return Inertia::render('Administrative/AdministrativeUpdate');
@@ -54,10 +60,32 @@ Route::middleware('auth')->group(function () {
     Route::get('/look_ad', function () {
         return Inertia::render('Administrative/AdministrativeSearch');
     })->name('buscar_administrativo');
+    Route::get('/res_details', [AdministrativeController::class, 'getResDetails']);
+    Route::get('/res_download/{id}', [AdministrativeController::class, 'downloadResDocument']);
+
 
     Route::get('/add_ad', function () {
         return Inertia::render('Administrative/AdministrativeAdd');
     })->name('agregar_administrativo');
+    Route::post('/register_res', [AdministrativeController::class, 'registerRes']);
+    Route::post('/upload_res', [AdministrativeController::class, 'uploadRes']);
+
+    //Agregar Silabos
+    Route::get('/update_sb', function () {
+        return Inertia::render('Syllabus/SyllabusUpdate');
+    })->name('actualizar_silabo');
+
+    Route::get('/look_sb', function () {
+        return Inertia::render('Syllabus/SyllabusSearch');
+    })->name('buscar_silabo');
+    Route::get('/syllabus_details', [SyllabusController::class, 'getSyllabusDetails']);
+    Route::get('/syllabus_download/{id}', [SyllabusController::class, 'downloadDocument']);
+
+    Route::get('/add_sb', function () {
+        return Inertia::render('Syllabus/SyllabusAdd');
+    })->name('agregar_silabo');
+    Route::post('/register_sb', [SyllabusController::class, 'registerSilabo']);
+    Route::post('/upload_sb', [SyllabusController::class, 'uploadSyllabus']);
 });
 
 require __DIR__ . '/auth.php';

@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import AddAcademicRegister from '@/Components/AddAcademicRegister.vue';
+import  SyllabusLook from '@/Components/SyllabusLook.vue';
 import { Head } from '@inertiajs/vue3';
 function redirectTo(routeName) {
     // Código de la función aquí...
@@ -23,11 +23,11 @@ function redirectTo(routeName) {
             <v-card-item class="bg-cyan-darken-1">
                 <v-card-title>
                     <v-btn density="compact" icon="mdi-arrow-left" @click="redirectTo('return')"></v-btn>
-                    <span>Agregar Documentos</span>
+                    <span>Buscar Silabos</span>
                 </v-card-title>
             </v-card-item>
             <v-list>
-                <AddAcademicRegister></AddAcademicRegister>
+                <SyllabusLook></SyllabusLook>
             </v-list>
         </v-card>
     </AuthenticatedLayout>

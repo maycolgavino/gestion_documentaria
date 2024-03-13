@@ -10,7 +10,7 @@ import { Head } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <v-card class="mx-auto" max-width="1000">
-            <v-card-item class="bg-cyan-darken-1">
+            <v-card-item class="bg-gray-custom">
                 <v-card-title>
                     <span>Mis Acciones</span>
                 </v-card-title>
@@ -21,3 +21,10 @@ import { Head } from '@inertiajs/vue3';
         </v-card>
     </AuthenticatedLayout>
 </template>
+
+<style>
+.bg-gray-custom {
+    background-color: #1e87f0;
+    /* Este es el color gris que quieres usar */
+}
+</style>

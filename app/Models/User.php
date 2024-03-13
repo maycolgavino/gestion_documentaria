@@ -17,6 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users'; // Nombre de la tabla en la base de datos
     protected $fillable = [
         'name',
         'email',
@@ -42,4 +43,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Relación con documentos
+    public function alumno()
+    {
+        return $this->hasMany(Alumno::class, 'correo', 'email');
+    }
+
+    // Relación con Silabo
+    public function silabo()
+    {
+        return $this->hasMany(Silabo::class, 'correo', 'email');
+    }
+
+    // Relación con Resolucion
+    public function resolucion()
+    {
+        return $this->hasMany(Resolucion::class, 'correo', 'email');
+    }
 }
