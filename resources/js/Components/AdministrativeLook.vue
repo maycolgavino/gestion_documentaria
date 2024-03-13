@@ -1,12 +1,12 @@
 <template>
-    <v-card class="mx-auto" max-width="944" title="Busqueda de Documentos de Tema Resoluciones">
+    <v-card class="mx-auto" max-width="944" title="Busqueda de Documentos de Tema Resoluciones" flat>
         <v-container>
             <v-container>
                 <!-- Campos adicionales en la parte superior -->
                 <v-row>
                     <v-col cols="12" md="6">
                         <v-select density="compact" placeholder="Tipos de Resolucion"
-                            prepend-inner-icon="mdi-archive-outline" :items="tiposResolucion" variant="outlined"
+                            prepend-inner-icon="mdi-format-list-bulleted-type" :items="tiposResolucion" variant="outlined"
                             v-model="tipoResSeleccionado"></v-select>
                     </v-col>
                     <v-col cols="12" md="6">

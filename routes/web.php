@@ -18,7 +18,7 @@ use App\Http\Controllers\AdministrativeController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/login', function () {
     return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -35,10 +35,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/completeform', function () {
+        return Inertia::render('Academic/CompleteResgistration');
+    })->name('complete_registro');
     //<!-- Academic Search -->
     Route::get('/update_ac', function () {
         return Inertia::render('Academic/AcademicUpdate');
     })->name('actualizar_academico');
+    Route::post('/update_documents', [DocumentAcademicController::class, 'updateDocuments']);
 
     Route::get('/look_ac', function () {
         return Inertia::render('Academic/AcademicSearch');
@@ -50,8 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/add_ac', function () {
         return Inertia::render('Academic/AcademicAdd');
     })->name('agregar_academico');
-    Route::post('/register-student', [DocumentAcademicController::class, 'registerStudent']);
-    Route::post('/upload-documents', [DocumentAcademicController::class, 'uploadDocuments']);
+    Route::post('/register_student', [DocumentAcademicController::class, 'registerStudent']);
+    Route::post('/upload_documents', [DocumentAcademicController::class, 'uploadDocuments']);
     // <!-- Administrative Search -->
     Route::get('/update_ad', function () {
         return Inertia::render('Administrative/AdministrativeUpdate');

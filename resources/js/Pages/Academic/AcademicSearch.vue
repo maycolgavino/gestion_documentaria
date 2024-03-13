@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import  AlumnoLook from '@/Components/AlumnoLook.vue';
+import AlumnoLook from '@/Components/AlumnoLook.vue';
 import { Head } from '@inertiajs/vue3';
 function redirectTo(routeName) {
     // Código de la función aquí...
@@ -16,19 +16,20 @@ function redirectTo(routeName) {
 
 <template>
 
-    <Head title="Dashboard" />
+    <Head title="Busqueda" />
 
     <AuthenticatedLayout>
-        <v-card class="mx-auto" max-width="1000">
-            <v-card-item class="bg-cyan-darken-1">
-                <v-card-title>
-                    <v-btn density="compact" icon="mdi-arrow-left" @click="redirectTo('return')"></v-btn>
-                    <span>Buscar Registros Academicos</span>
-                </v-card-title>
-            </v-card-item>
-            <v-list>
-                <AlumnoLook></AlumnoLook>
-            </v-list>
-        </v-card>
+        <div class="my-8">
+            <v-card class="mx-auto" max-width="1000">
+                <v-toolbar color="blue-grey-darken-4">
+                    <v-btn icon="mdi-arrow-left" @click="redirectTo('return')" class="text-none" density="compact"></v-btn>
+                    <v-toolbar-title class="text-gray-100">Busqueda de Documentos Académicos</v-toolbar-title>
+                </v-toolbar>
+                <v-list>
+                    <AlumnoLook></AlumnoLook>
+                </v-list>
+            </v-card>
+        </div>
+
     </AuthenticatedLayout>
 </template>

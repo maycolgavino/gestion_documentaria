@@ -1,14 +1,15 @@
 <template>
-    <v-card class="mx-auto" max-width="944" title="Busqueda de Documentos Académicos">
+    <v-card class="mx-auto" max-width="944"  variant="flat">
         <v-container>
             <v-text-field v-model="searchDni" dense placeholder="Buscar por DNI" prepend-inner-icon="mdi-magnify"
                 variant="outlined">
             </v-text-field>
-            <v-btn color="primary" @click="buscarAlumno">Buscar</v-btn> <!-- Botón de búsqueda -->
+            <v-btn class="text-none" color="blue-grey-darken-4" @click="buscarAlumno">Buscar</v-btn> <!-- Botón de búsqueda -->
         </v-container>
         <div>
-            <v-card v-if="alumno" class="mb-4">
-                <v-card-title>Detalles del Alumno</v-card-title>
+            <v-card v-if="alumno" class="mb-4" variant="outlined" >
+                <v-card-title>Detalles del Alumno:</v-card-title>
+                <v-spacer></v-spacer>
                 <v-list-item>
                     <v-list-item-content>
                         <v-list-item-title>{{ alumno.nombre }}</v-list-item-title>
@@ -36,7 +37,7 @@
                         <tr v-for="(archivo, index) in archivosList" :key="archivo.id">
                             <td>{{ archivo.dni }}</td>
                             <td>{{ archivo.grado }}</td>
-                            <td>{{ archivo.tipoDocumento }}</td>
+                            <td>{{ archivo.tipo }}</td>
                             <td>
                                 <v-btn icon @click="descargarDocumento(archivo.id)">
                                     <v-icon>mdi-download</v-icon>

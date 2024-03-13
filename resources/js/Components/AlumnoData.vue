@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="944" title="Registro del Estudiante">
+  <v-card class="mx-auto" max-width="944" title="Registro del Estudiante" flat>
     <v-container>
       <v-text-field density="compact" placeholder="Nombre del Estudiante" prepend-inner-icon="mdi-account"
         variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90" v-model="alumno.nombre"
@@ -10,13 +10,14 @@
         v-model="alumno.dni"></v-text-field>
 
       <v-text-field density="compact" placeholder="Carrera del Estudiante" prepend-inner-icon="mdi-account-school"
-        variant="outlined" v-model="alumno.carrera"></v-text-field>
+        variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90"
+        v-model="alumno.carrera"></v-text-field>
 
       <!-- Campos adicionales en la parte superior -->
       <v-row>
         <v-col cols="12" md="6">
           <v-text-field density="compact" placeholder="Código de Caja" prepend-inner-icon="mdi-archive-outline"
-            variant="outlined" v-model="numeroCaja"></v-text-field>
+            variant="outlined" :rules="[rules.required, rules.length(2)]" v-model="numeroCaja"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-select density="compact" placeholder="Año" prepend-inner-icon="mdi-calendar-range" variant="outlined"
@@ -82,7 +83,12 @@
         </v-card>
       </v-dialog>
     </div>
-
+    <!-- SNACKBACK -->
+    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" color="red">
+      {{ snackbarText }}
+      <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+    </v-snackbar>
+    <!-- SASA -->
     <div class="mx-auto" max-width="944">
       <v-text-field density="compact" placeholder="Observaciones" prepend-inner-icon="mdi-eye-outline"
         variant="outlined" v-model="observaciones"></v-text-field>
@@ -92,7 +98,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
 
-      <v-btn color="success" @click="completarRegistroCompleto">
+      <v-btn color="blue-grey-darken-4" @click="completarRegistroCompleto">
         Completar Registro
         <v-icon right>mdi-chevron-right</v-icon>
       </v-btn>
@@ -126,8 +132,8 @@ export default {
       numeroCaja: '',
       anioEgreso: '',
       observaciones: '',
-      grados: ["Bachiller", "Título", "Maestría", "Doctorado", "Especialidad", "Especialidad 2", "Convalidación", "Alumno"],
-      tiposDocumento: ["Acta", "Resolución", "Diploma", "Otro"],
+      grados: ["BACHILLER", "TITULO", "MAESTRIA", "DOCTORADO", "ESPECIALIDAD", "ESPECIALIDAD 2", "CONVALIDACION", "ALUMNO"],
+      tiposDocumento: ["ACTA", "RESOLUCION", "DIPLOMA", "OTRO"],
       aniosDisponibles: Array.from({ length: 2024 - 1965 + 1 }, (v, k) => 2024 - k),
       rules: {
         required: (value) => !!value || 'Este campo es requerido',
@@ -135,6 +141,9 @@ export default {
         maxLength: (maxLength) => (value) => (value && value.length <= maxLength) || `No debe exceder los ${maxLength} caracteres`,
         onlyNumbers: (value) => /^\d+$/.test(value) || 'Solo se permiten números',
       },
+      snackbar: false,
+            snackbarText: '',
+            snackbarTimeout: 3000
     };
   },
   methods: {
@@ -161,7 +170,7 @@ export default {
     // Asegúrate de que registerAlumno devuelva una promesa
     registerAlumno() {
       return new Promise((resolve, reject) => {
-        const url = '/register-student'; // Asegúrate de usar la URL correcta para tu API
+        const url = '/register_student'; // Asegúrate de usar la URL correcta para tu API
         const alumnoData = {
           dni: this.alumno.dni,
           nombre: this.alumno.nombre,
@@ -169,6 +178,9 @@ export default {
           anio_egreso: this.anioEgreso,
           caja: this.numeroCaja,
           observaciones: this.observaciones,
+          snackbar: false,
+          snackbarText: '',
+          snackbarTimeout: 3000,
         };
 
         axios.post(url, alumnoData)
@@ -177,6 +189,7 @@ export default {
             resolve(response); // Resuelve la promesa si el registro fue exitoso
           })
           .catch(error => {
+            this.showSnackbar("Por favor, completa todos los campos.");
             console.error('Error durante el registro del alumno:', error);
             reject(error); // Rechaza la promesa si hubo un error
           });
@@ -196,7 +209,7 @@ export default {
           formData.append(`documentos[${index}][tipo]`, archivo.tipoDocumento);
         });
 
-        const uploadUrl = '/upload-documents'; // Asegúrate de que esta es la URL correcta para tu API
+        const uploadUrl = '/upload_documents'; // Asegúrate de que esta es la URL correcta para tu API
         axios.post(uploadUrl, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -207,6 +220,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
+            this.showSnackbar("Por favor, completa todos los campos.");
             console.error('Error durante la subida de documentos:', error);
             reject(error);
           });
@@ -223,7 +237,7 @@ export default {
 
     agregarEditarArchivo() {
       if (!this.archivo.grado || !this.archivo.tipoDocumento || !this.archivo.documento) {
-        alert("Por favor, completa todos los campos.");
+        this.showSnackbar("Por favor, completa todos los campos.");
         return;
       }
       if (this.esEdicion) {
@@ -250,6 +264,10 @@ export default {
       }
     },
 
+    showSnackbar(message) {
+      this.snackbarText = message;
+      this.snackbar = true;
+    },
 
     resetArchivo() {
       // Restablecer archivo a su estado inicial

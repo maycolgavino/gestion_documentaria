@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto" max-width="944" title="Busqueda de Documentos de Silabo">
+    <v-card class="mx-auto" max-width="944" title="Busqueda de Documentos de Silabo" flat>
         <v-container>
             <v-text-field v-model="searchQuery" dense placeholder="Buscar por facultad, escuela, año o código de curso"
                 prepend-inner-icon="mdi-magnify" variant="outlined">

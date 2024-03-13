@@ -6,25 +6,24 @@ import { Head } from '@inertiajs/vue3';
 
 <template>
 
-    <Head title="Dashboard" />
+    <Head title="Archivo Central - Logeado" />
 
     <AuthenticatedLayout>
-        <v-card class="mx-auto" max-width="1000">
-            <v-card-item class="bg-gray-custom">
-                <v-card-title>
-                    <span>Mis Acciones</span>
-                </v-card-title>
-            </v-card-item>
-            <v-list>
-                <main-component></main-component>
-            </v-list>
-        </v-card>
+        <div class="my-8">
+            <v-card class="mx-auto" max-width="1000">
+                <v-card-item class="bg-dark dark:bg-sky-900">
+                    <v-card-title>
+                        <span class="text-gray-100">Mis Acciones</span>
+                    </v-card-title>
+                </v-card-item>
+                <v-card-item class="bg-dark dark:bg-neutral-50" >
+                    <main-component></main-component>
+                </v-card-item>
+                
+            </v-card>
+        </div>
+
     </AuthenticatedLayout>
 </template>
 
-<style>
-.bg-gray-custom {
-    background-color: #1e87f0;
-    /* Este es el color gris que quieres usar */
-}
-</style>
+<style></style>

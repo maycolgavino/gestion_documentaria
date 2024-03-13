@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import  SyllabusLook from '@/Components/SyllabusLook.vue';
+import SyllabusLook from '@/Components/SyllabusLook.vue';
 import { Head } from '@inertiajs/vue3';
 function redirectTo(routeName) {
     // Código de la función aquí...
@@ -19,16 +19,17 @@ function redirectTo(routeName) {
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <v-card class="mx-auto" max-width="1000">
-            <v-card-item class="bg-cyan-darken-1">
-                <v-card-title>
-                    <v-btn density="compact" icon="mdi-arrow-left" @click="redirectTo('return')"></v-btn>
-                    <span>Buscar Silabos</span>
-                </v-card-title>
-            </v-card-item>
-            <v-list>
-                <SyllabusLook></SyllabusLook>
-            </v-list>
-        </v-card>
+        <div class="my-8">
+            <v-card class="mx-auto" max-width="1000">
+                <v-toolbar color="blue-grey-darken-4">
+                    <v-btn icon="mdi-arrow-left" @click="redirectTo('return')" class="text-none" density="compact"></v-btn>
+                    <v-toolbar-title class="text-gray-100">Agregar Documentos</v-toolbar-title>
+                </v-toolbar>
+                <v-list>
+                    <SyllabusLook></SyllabusLook>
+                </v-list>
+            </v-card>
+        </div>
+
     </AuthenticatedLayout>
 </template>

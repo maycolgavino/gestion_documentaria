@@ -1,11 +1,12 @@
 <template>
-  <v-card class="mx-auto" max-width="944" title="Registro del Documentos Administrativos">
+  <v-card class="mx-auto" max-width="944" title="Registro del Documentos Administrativos" flat>
     <v-container>
       <!-- Campos adicionales en la parte superior -->
       <v-row>
         <v-col cols="12" md="6">
-          <v-select density="compact" placeholder="Tipos de Resolucion" prepend-inner-icon="mdi-archive-outline"
-            :items="tiposResolucion" variant="outlined" v-model="res.tipo_res"></v-select>
+          <v-select density="compact" placeholder="Tipos de Resolucion"
+            prepend-inner-icon="mdi-format-list-bulleted-type" :items="tiposResolucion" variant="outlined"
+            v-model="res.tipo_res"></v-select>
         </v-col>
         <v-col cols="12" md="6">
           <v-select density="compact" placeholder="Año" prepend-inner-icon="mdi-calendar-range" variant="outlined"
@@ -61,13 +62,13 @@
           <v-card-title>Subir Documento</v-card-title>
           <v-card-text>
             <v-container>
-              <v-text-field density="compact" placeholder="Numero" prepend-inner-icon="mdi-account-school"
-                variant="outlined" v-model="detres.numero"></v-text-field>
-              <v-text-field density="compact" placeholder="Oficina de Envio" prepend-inner-icon="mdi-account-school"
+              <v-text-field density="compact" placeholder="Numero" prepend-inner-icon="mdi-numeric" variant="outlined"
+                v-model="detres.numero"></v-text-field>
+              <v-text-field density="compact" placeholder="Oficina de Envio" prepend-inner-icon="mdi-email-arrow-right"
                 variant="outlined" v-model="detres.autor"></v-text-field>
-              <v-text-field density="compact" placeholder="Oficina de Recepcion" prepend-inner-icon="mdi-account-school"
-                variant="outlined" v-model="detres.receptor"></v-text-field>
-              <v-text-field density="compact" placeholder="Motivo" prepend-inner-icon="mdi-account-school"
+              <v-text-field density="compact" placeholder="Oficina de Recepcion"
+                prepend-inner-icon="mdi-email-arrow-left" variant="outlined" v-model="detres.receptor"></v-text-field>
+              <v-text-field density="compact" placeholder="Motivo" prepend-inner-icon="mdi-text-short"
                 variant="outlined" v-model="detres.motivo"></v-text-field>
 
               <input type="file" @change="onFileSelected" class="file-input" />
@@ -81,10 +82,10 @@
       </v-dialog>
     </div>
 
-    <div class="mx-auto" max-width="944">
+    <!-- <div class="mx-auto" max-width="944">
       <v-text-field density="compact" placeholder="Observaciones" prepend-inner-icon="mdi-eye-outline"
         variant="outlined" v-model="observaciones"></v-text-field>
-    </div>
+    </div> -->
 
     <!-- HASTA AQUI -->
     <v-card-actions>
@@ -197,7 +198,7 @@ export default {
           }
         })
           .then(response => {
-            console.log('Documentos subidos exitosamente:', response.data);
+            window.location.href = '/completeform';
             resolve(response);
           })
           .catch(error => {
@@ -224,7 +225,7 @@ export default {
         // Encuentra el índice del archivo a editar en archivosList
         const index = this.archivosList.findIndex(a => a.codigo === this.detres.codigo);
         if (index !== -1) {
-          this.archivosList[index] = { ...this.detres  };
+          this.archivosList[index] = { ...this.detres };
         }
       } else {
         // Agrega un nuevo archivo a archivosList
@@ -249,6 +250,14 @@ export default {
       this.detres = { numero: '', autor: '', receptor: '', motivo: '', documento: null };
       this.esEdicion = false;
       this.indiceEdicion = null;
+    },
+    redirectTo(routeName) {
+      console.log('Redirigiendo a:', routeName);
+      switch (routeName) {
+        case 'actualizar_ac':
+          window.location.href = '/update_ac'; // Reemplaza con la ruta de Laravel
+          break;
+      }
     },
   },
 };

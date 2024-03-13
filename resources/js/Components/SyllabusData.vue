@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="944" title="Registro del Documentos de Silabo">
+  <v-card class="mx-auto" max-width="944" title="Registro del Documentos de Silabo" flat>
     <v-container>
       <v-text-field density="compact" placeholder="Facultad" prepend-inner-icon="mdi-account-school" variant="outlined"
         v-model="silabo.facultad"></v-text-field>

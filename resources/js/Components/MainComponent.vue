@@ -1,89 +1,117 @@
 <template>
     <div>
         <!-- Academic Search -->
-        <v-card class="mx-auto" max-width="900">
-            <v-list lines="two">
-                <v-list-item prepend-icon="mdi-school" title="Búsqueda Académica">
+        <v-card class="mx-auto" max-width="900" variant="plain" >
+            <v-list lines="three" >
+                <v-list-item>
+                    <template v-slot:title>
+                        Búsqueda Documentos Académicos
+                    </template>
+                    <template v-slot:prepend>
+                        <v-avatar size="64" rounded="0">
+                            <v-icon color="blue-grey-darken-2" size="48">mdi-school</v-icon>
+                        </v-avatar>
+                    </template>
                     <template v-slot:subtitle>
-                        <span class="font-weight-bold">Documentos Academicos</span> &mdash; Aquí es donde podrás buscar y agregar datos de alumnos y sus documentos
-                        <div>
-                            <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ac')">
-                                Actualizar
-                                <v-icon end icon="mdi-note-edit"></v-icon>
-                            </v-btn> -->
-                            <v-btn class="ma-2" color="white" @click="redirectTo('agregar_ac')">
-                                Agregar
-                                <v-icon end icon="mdi-pencil"></v-icon>
-                            </v-btn>
-                            <v-btn class="ma-2" color="white" @click="redirectTo('busqueda_ac')">
-                                Búsqueda
-                                <v-icon end icon="mdi-clipboard-text-search"></v-icon>
-                            </v-btn>
+                        <span class="font-weight-bold">Documentos Académicos</span> &mdash; Aquí es donde podrás buscar
+                        y agregar datos de alumnos y sus documentos
+                        <div class="mt-2">
+                            <v-row>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none" color="blue-grey-darken-4" 
+                                    rounded="sm" variant="outlined" prepend-icon="mdi-pencil"
+                                        @click="redirectTo('agregar_ac')">
+                                        Agregar
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none" color="blue-grey-darken-4" variant="text" 
+                                    prepend-icon="mdi-clipboard-text-search"
+                                        @click="redirectTo('busqueda_ac')">
+                                        Búsqueda
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none" color="blue-grey-darken-4" variant="text" 
+                                    prepend-icon="mdi-update"
+                                        @click="redirectTo('actualizar_ac')">
+                                        Actualizar
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         </div>
                     </template>
                 </v-list-item>
 
                 <v-divider></v-divider>
 
-                <v-list-item prepend-icon="mdi-file-document">
-
+                <v-list-item>
                     <template v-slot:title>
                         Búsqueda Documentaria
                     </template>
-
+                    <template v-slot:prepend>
+                        <v-avatar size="64" rounded="0">
+                            <v-icon color="blue-grey-darken-2" size="48">mdi-file-document</v-icon>
+                        </v-avatar>
+                    </template>
                     <template v-slot:subtitle>
-                        <span class="font-weight-bold">Resoluciones Administrativas</span> &mdash; Aquí es donde se buscará y agregará datos de 
-                        Resoluciones Administrativas
-                        <v-card-text>
-                            <div>
-                                <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_ad')">
-                                    Actualizar
-                                    <v-icon end icon="mdi-note-edit"></v-icon>
-                                </v-btn> -->
-                                <v-btn class="ma-2" color="white" @click="redirectTo('agregar_ad')">
-                                    Agregar
-                                    <v-icon end icon="mdi-pencil"></v-icon>
-                                </v-btn>
-                                <v-btn class="ma-2" color="white" @click="redirectTo('busqueda_ad')">
-                                    Búsqueda
-                                    <v-icon end icon="mdi-clipboard-text-search"></v-icon>
-                                </v-btn>
-                            </div>
-                        </v-card-text>
+                        <span class="font-weight-bold">Resoluciones Administrativas</span> &mdash; Aquí es donde se
+                        buscará y agregará datos de Resoluciones Administrativas
+                        <div class="mt-2">
+                            <v-row>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none " color="blue-grey-darken-4" 
+                                    rounded="sm" variant="outlined"
+                                        prepend-icon="mdi-pencil"
+                                        @click="redirectTo('agregar_ad')">
+                                        Agregar
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none " color="blue-grey-darken-4" variant="text" 
+                                        @click="redirectTo('busqueda_ad')" prepend-icon="mdi-clipboard-text-search">
+                                        Búsqueda 
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </div>
                     </template>
                 </v-list-item>
 
-                <v-divider ></v-divider>
+                <v-divider></v-divider>
 
-                <v-list-item prepend-icon="mdi-note-text-outline">
-
+                <v-list-item>
                     <template v-slot:title>
-                        Búsqueda Sílabos Academicos
+                        Búsqueda Sílabos Académicos
                     </template>
-
+                    <template v-slot:prepend>
+                        <v-avatar size="64" rounded="0">
+                            <v-icon color="blue-grey-darken-2" size="48">mdi-note-text-outline</v-icon>
+                        </v-avatar>
+                    </template>
                     <template v-slot:subtitle>
-                        <span class="font-weight-bold">Silabos Académicos</span> &mdash; Aquí se encontrarán y 
-                        agregarán datos de Sílabos Académicos
-                        
-                        <v-card-text>
-                            <div>
-                                <!-- <v-btn class="ma-2" color="white" @click="redirectTo('actualizar_sb')">
-                                    Actualizar
-                                    <v-icon end icon="mdi-note-edit"></v-icon>
-                                </v-btn> -->
-                                <v-btn class="ma-2" color="white" @click="redirectTo('agregar_sb')">
-                                    Agregar
-                                    <v-icon end icon="mdi-pencil"></v-icon>
-                                </v-btn>
-                                <v-btn class="ma-2" color="white" @click="redirectTo('busqueda_sb')">
-                                    Búsqueda
-                                    <v-icon end icon="mdi-clipboard-text-search"></v-icon>
-                                </v-btn>
-                            </div>
-                        </v-card-text>
+                        <span class="font-weight-bold">Silabos Académicos</span> &mdash; Aquí se encontrarán y agregarán
+                        datos de Sílabos Académicos
+                        <div class="mt-2">
+                            <v-row>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none " color="blue-grey-darken-4" 
+                                    rounded="sm" variant="outlined"
+                                    prepend-icon="mdi-pencil"
+                                        @click="redirectTo('agregar_sb')">
+                                        Agregar
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="auto">
+                                    <v-btn class="text-none " color="blue-grey-darken-4" variant="text" 
+                                        prepend-icon="mdi-clipboard-text-search"
+                                        @click="redirectTo('busqueda_sb')">
+                                        Búsqueda
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                        </div>
                     </template>
-
-
                 </v-list-item>
             </v-list>
         </v-card>

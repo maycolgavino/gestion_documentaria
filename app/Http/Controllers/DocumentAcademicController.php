@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Alumno;
 use App\Models\DocAlumno;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
@@ -29,11 +30,11 @@ class DocumentAcademicController extends Controller
             $alumno = Alumno::create([
                 'dni' => $validatedData['dni'],
                 'email' => $userEmail,
-                'nombre' => $validatedData['nombre'],
-                'carrera' => $validatedData['carrera'],
+                'nombre' => strtoupper($validatedData['nombre']),
+                'carrera' => strtoupper($validatedData['carrera']),
                 'anio_egreso' => $validatedData['anio_egreso'],
-                'caja' => $validatedData['caja'],
-                'observaciones' => $validatedData['observaciones'],
+                'caja' => strtoupper($validatedData['caja']),
+                'observaciones' => strtoupper($validatedData['observaciones']),
             ]);
 
             return response()->json(['message' => 'Registro de alumno exitoso.', 'data' => $alumno], 201);
@@ -68,8 +69,8 @@ class DocumentAcademicController extends Controller
 
                 DocAlumno::create([
                     'dni' => $alumno->dni,
-                    'grado' => $doc['grado'],
-                    'tipo' => $doc['tipo'],
+                    'grado' => strtoupper($doc['grado']),
+                    'tipo' => strtoupper($doc['tipo']),
                     'ruta' => $ruta,
                 ]);
             }
@@ -115,4 +116,89 @@ class DocumentAcademicController extends Controller
             return response()->json(['message' => 'Error downloading the document: ' . $e->getMessage()], 500);
         }
     }
+
+
+    //A partir de aqui se modificaran los archivos
+
+
+    
+    public function updateDocuments(Request $request)
+    {
+        $validatedData = $request->validate([
+            'dni' => 'required|string|exists:alumno,dni',
+            'documentos' => 'required|array',
+            'documentos.*.tipo' => 'required|string',
+            'documentos.*.grado' => 'required|string',
+            'documentos.*.documento' => 'required|file',
+            'archivoParaEliminar' => 'nullable|array',
+            'archivoParaEliminar.*' => 'required|integer|exists:doc_alumno,id',
+        ]);
+    
+        try {
+            // Iniciar una transacción para garantizar la atomicidad
+            DB::beginTransaction();
+    
+            // Buscamos al alumno por su DNI
+            $alumno = Alumno::where('dni', $validatedData['dni'])->firstOrFail();
+    
+            // Eliminación de documentos especificados
+            if (!empty($validatedData['archivoParaEliminar'])) {
+                foreach ($validatedData['archivoParaEliminar'] as $docId) {
+                    $doc = DocAlumno::find($docId);
+                    if ($doc && $doc->dni === $alumno->dni) {
+                        // Verificar la existencia del archivo antes de eliminar
+                        if (Storage::exists($doc->ruta)) {
+                            // Elimina el archivo del sistema de archivos
+                            Storage::delete($doc->ruta);
+                            // Verificar si el archivo ha sido eliminado
+                            if (Storage::exists($doc->ruta)) {
+                                return response()->json(['error' => 'No se pudo eliminar el archivo del sistema de archivos.'], 500);
+                            }
+                        } else {
+                            // Continúa con la eliminación del registro de la base de datos incluso si el archivo no existe
+                            $doc->delete();
+                            return response()->json(['error' => 'El archivo no existe en el sistema de archivos.'], 404);
+                        }
+                        // Elimina el registro de la base de datos
+                        $doc->delete();
+                    } else {
+                        return response()->json(['error' => 'Documento no encontrado o no pertenece al alumno.'], 404);
+                    }
+                }
+            }
+    
+            // Subida de nuevos documentos
+            foreach ($validatedData['documentos'] as $doc) {
+                $documentoFile = $doc['documento'];
+    
+                // Construimos el nombre del archivo usando el tipo, grado y DNI del alumno
+                $nombreArchivo = $doc['tipo'] . '_' . $doc['grado'] . '_' . $alumno->dni . '.' . $documentoFile->getClientOriginalExtension();
+    
+                // Guardamos el archivo en el disco 'public' y en la carpeta especificada con el nombre construido
+                $ruta = $documentoFile->storeAs('public/documentos/academicos/' . $alumno->dni, $nombreArchivo);
+    
+                // Creamos un nuevo registro en la tabla DocAlumno
+                DocAlumno::create([
+                    'dni' => $alumno->dni,
+                    'grado' => strtoupper($doc['grado']),
+                    'tipo' => strtoupper($doc['tipo']),
+                    'ruta' => $ruta,
+                ]);
+            }
+    
+            // Confirmar la transacción
+            DB::commit();
+    
+            // Respuesta de éxito
+            return response()->json(['message' => 'Documentos subidos exitosamente.'], 201);
+        } catch (\Exception $e) {
+            // Revertir la transacción en caso de error
+            DB::rollBack();
+    
+            // Manejo de errores y respuesta de error
+            return response()->json(['error' => 'Error al subir documentos: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    
 }
