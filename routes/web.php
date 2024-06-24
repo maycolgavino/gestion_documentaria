@@ -35,10 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/completeform', function () {
-        return Inertia::render('Academic/CompleteResgistration');
-    })->name('complete_registro');
+
     //<!-- Academic Search -->
+    
+    Route::get('/completeform_acad', function () {
+        return Inertia::render('Academic/CompleteAcad');
+    })->name('complete_registro_acad');
+
     Route::get('/update_ac', function () {
         return Inertia::render('Academic/AcademicUpdate');
     })->name('actualizar_academico');
@@ -57,6 +60,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/register_student', [DocumentAcademicController::class, 'registerStudent']);
     Route::post('/upload_documents', [DocumentAcademicController::class, 'uploadDocuments']);
     // <!-- Administrative Search -->
+
+    Route::get('/completeform_ad', function () {
+        return Inertia::render('Administrative/CompleteAdmin');
+    })->name('complete_registro_ad');
+
+
     Route::get('/update_ad', function () {
         return Inertia::render('Administrative/AdministrativeUpdate');
     })->name('actualizar_administrativo');
@@ -75,6 +84,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/upload_res', [AdministrativeController::class, 'uploadRes']);
 
     //Agregar Silabos
+
+    Route::get('/completeform_syll', function () {
+        return Inertia::render('Syllabus/CompleteSyll');
+    })->name('complete_registro_syll');
+
     Route::get('/update_sb', function () {
         return Inertia::render('Syllabus/SyllabusUpdate');
     })->name('actualizar_silabo');

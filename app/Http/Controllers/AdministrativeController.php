@@ -53,7 +53,7 @@ class  AdministrativeController extends Controller
             foreach ($validatedData['documentos'] as $doc) {
                 $documentoFile = $doc['documento'];
                 // Construye el nombre del archivo usando el código, carrera y curso
-                $nombreArchivo = $doc['autor'] . '_' . $doc['numero'] . '_' . $resdata->anio . '.pdf';
+                $nombreArchivo = strtoupper($resdata->tipo_res) . '  N°' . $doc['numero'] . '-' . $resdata->anio . '.pdf';
 
                 // Guarda el archivo en el disco 'public' y en la carpeta especificada con el nombre construido
                 // Dentro del método uploadRes

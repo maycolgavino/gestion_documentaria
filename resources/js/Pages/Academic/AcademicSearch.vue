@@ -16,14 +16,19 @@ function redirectTo(routeName) {
 
 <template>
 
-    <Head title="Busqueda" />
+    <Head title="Búsqueda Documentos Académicos" />
 
     <AuthenticatedLayout>
         <div class="my-8">
             <v-card class="mx-auto" max-width="1000">
-                <v-toolbar color="blue-grey-darken-4">
-                    <v-btn icon="mdi-arrow-left" @click="redirectTo('return')" class="text-none" density="compact"></v-btn>
-                    <v-toolbar-title class="text-gray-100">Busqueda de Documentos Académicos</v-toolbar-title>
+                <v-toolbar color="blue-darken-3">
+                    <v-btn icon="mdi-arrow-left" @click="redirectTo('return')" class="text-none"
+                        density="compact"></v-btn>
+
+                    <v-toolbar-title class="text-gray-100">
+                        Buscar
+                        <span class="text-sm text-gray-300 ml-2">Documentos Académicos</span>
+                    </v-toolbar-title>
                 </v-toolbar>
                 <v-list>
                     <AlumnoLook></AlumnoLook>

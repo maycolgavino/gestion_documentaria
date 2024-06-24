@@ -1,27 +1,31 @@
 <template>
-  <v-card class="mx-auto" max-width="944" title="Registro del Estudiante" flat>
+  <v-card class="mx-auto" max-width="944" flat>
+    <v-card-title class="justify-center">
+      <div class="text-center">Registro del Estudiante</div>
+    </v-card-title>
     <v-container>
       <v-text-field density="compact" placeholder="Nombre del Estudiante" prepend-inner-icon="mdi-account"
         variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90" v-model="alumno.nombre"
-        color="blue"></v-text-field>
+        color="blue-darken-3"></v-text-field>
 
       <v-text-field density="compact" placeholder="Número de Documento" prepend-inner-icon="mdi-id-card"
-        variant="outlined" :rules="[rules.required, rules.onlyNumbers, rules.length(8)]"
-        v-model="alumno.dni"></v-text-field>
+        variant="outlined" :rules="[rules.required, rules.onlyNumbers, rules.length(8)]" v-model="alumno.dni"
+        maxlength="8" color="blue-darken-3"></v-text-field>
 
       <v-text-field density="compact" placeholder="Carrera del Estudiante" prepend-inner-icon="mdi-account-school"
         variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90"
-        v-model="alumno.carrera"></v-text-field>
+        v-model="alumno.carrera" color="blue-darken-3"></v-text-field>
 
       <!-- Campos adicionales en la parte superior -->
       <v-row>
         <v-col cols="12" md="6">
           <v-text-field density="compact" placeholder="Código de Caja" prepend-inner-icon="mdi-archive-outline"
-            variant="outlined" :rules="[rules.required, rules.length(2)]" v-model="numeroCaja"></v-text-field>
+            variant="outlined" :rules="[rules.required, rules.boxCode]" v-model="numeroCaja"
+            maxlength="2" color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-select density="compact" placeholder="Año" prepend-inner-icon="mdi-calendar-range" variant="outlined"
-            :items="aniosDisponibles" v-model="anioEgreso"></v-select>
+            :items="aniosDisponibles" v-model="anioEgreso" color="blue-darken-3"></v-select>
         </v-col>
       </v-row>
     </v-container>
@@ -29,11 +33,13 @@
     <v-divider></v-divider>
     <div>
       <v-card class="mx-auto" max-width="944">
-        <v-card-title>Documentos Subidos</v-card-title>
+        <v-card-title class="justify-center">
+          <div class="text-center" style="font-weight: bold; text-decoration: underline;">Agregar nuevos
+            documentos aquí</div>
+        </v-card-title>
         <v-table>
           <thead>
             <tr>
-              <!-- <th class="text-left">Código</th> -->
               <th class="text-left">Grado</th>
               <th class="text-left">Tipo de Documento</th>
               <th class="text-left">Nombre del Archivo</th>
@@ -42,13 +48,11 @@
           </thead>
           <tbody>
             <tr v-for="(archivo, index) in archivosList" :key="archivo.codigo">
-              <!-- <td>{{ archivo.codigo }}</td> -->
               <td>{{ archivo.grado }}</td>
               <td>{{ archivo.tipoDocumento }}</td>
               <td>{{ archivo.documento }}</td>
-              <!-- Asegúrate de que se accede correctamente al nombre del archivo -->
               <td>
-                <v-btn icon @click="abrirDialogoParaEditar(index)">
+                <v-btn icon @click="abrirDialogoParaEditar(index)" color="blue-darken-3">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn icon color="red" @click="eliminarArchivo(archivo.codigo)">
@@ -60,59 +64,70 @@
         </v-table>
       </v-card>
     </div>
-    <!-- AQUI ES DONDE SE REALIZARAN CAMBIOS EN LA CARPETA -->
-    <div class="text-center pa-4">
-      <v-btn @click="dialog = true">AGREGAR DOCUMENTO</v-btn>
 
-      <v-dialog v-model="dialog" width="440">
+    <div class="text-center pa-4">
+      <v-btn class="mr-4 text-none text-subtitle-1" variant="outlined" color="blue-darken-3"
+        prepend-icon="mdi-plus-box" stacked @click="dialog = true">Agregar Documento</v-btn>
+
+      <v-dialog v-model="dialog" width="440" persistent>
         <v-card max-width="740">
-          <v-card-title>Subir Documento</v-card-title>
+          <v-card-title>
+            <div class="text-center" style="font-weight: bold; ">Adjuntar Documentos</div>
+          </v-card-title>
           <v-card-text>
             <v-container>
-              <v-select v-model="archivo.grado" :items="grados" label="Grado" required></v-select>
-              <v-select v-model="archivo.tipoDocumento" :items="tiposDocumento" label="Tipo de Documento"
-                required></v-select>
-              <!-- <v-file-input v-model="archivo.documento" label="Subir documento" required></v-file-input> -->
+              <v-select  variant="outlined" v-model="archivo.grado" :items="grados" label="Grado" required color="blue-darken-3"></v-select>
+              <v-select  variant="outlined" v-model="archivo.tipoDocumento" :items="tiposDocumento" label="Tipo de Documento"
+                required color="blue-darken-3"></v-select>
               <input type="file" @change="onFileSelected" class="file-input" />
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="agregarEditarArchivo">Agregar</v-btn>
-            <v-btn color="grey darken-1" text @click="dialog = false">Cancelar</v-btn>
+            <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="blue-darken-3" @click="agregarEditarArchivo">Agregar</v-btn>
+            <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="red-darken-4" @click="dialog = false">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </div>
-    <!-- SNACKBACK -->
+
     <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" color="red">
       {{ snackbarText }}
       <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
     </v-snackbar>
-    <!-- SASA -->
-    <div class="mx-auto" max-width="944">
-      <v-text-field density="compact" placeholder="Observaciones" prepend-inner-icon="mdi-eye-outline"
-        variant="outlined" v-model="observaciones"></v-text-field>
-    </div>
 
-    <!-- HASTA AQUI -->
+    <v-dialog v-model="confirmDialog" max-width="400">
+      <v-card>
+        <v-card-title><div class="text-center" style="font-weight: bold; ">Confirmar Registro</div></v-card-title>
+        <v-card-text>
+          ¿Estás seguro de completar el registro?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="blue-darken-3" variant="elevated" @click="confirmarRegistro">Sí</v-btn>
+          <v-btn color="red-darken-2" variant="outlined" @click="confirmDialog = false">No</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-card-actions>
       <v-spacer></v-spacer>
-
-      <v-btn color="blue-grey-darken-4" @click="completarRegistroCompleto">
-        Completar Registro
-        <v-icon right>mdi-chevron-right</v-icon>
-      </v-btn>
+      <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
+                @click="confirmDialog = true">
+                Completar Registro
+                <v-icon right>mdi-chevron-right</v-icon>
+            </v-btn>
     </v-card-actions>
   </v-card>
-
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       archivosParaSubir: [],
       dialog: false,
+      confirmDialog: false,
       proximoCodigo: 1,
       archivosList: [],
       alumno: {
@@ -133,17 +148,18 @@ export default {
       anioEgreso: '',
       observaciones: '',
       grados: ["BACHILLER", "TITULO", "MAESTRIA", "DOCTORADO", "ESPECIALIDAD", "ESPECIALIDAD 2", "CONVALIDACION", "ALUMNO"],
-      tiposDocumento: ["ACTA", "RESOLUCION", "DIPLOMA", "OTRO"],
+      tiposDocumento: ["ACTA", "RESOLUCION", "DIPLOMA", "DNI", "CERTIFICADO DE ESTUDIOS", "CONSTANCIA DE INGRESO"],
       aniosDisponibles: Array.from({ length: 2024 - 1965 + 1 }, (v, k) => 2024 - k),
       rules: {
         required: (value) => !!value || 'Este campo es requerido',
         length: (length) => (value) => (value && value.length === length) || `Debe tener ${length} caracteres`,
         maxLength: (maxLength) => (value) => (value && value.length <= maxLength) || `No debe exceder los ${maxLength} caracteres`,
         onlyNumbers: (value) => /^\d+$/.test(value) || 'Solo se permiten números',
+        boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
       },
       snackbar: false,
-            snackbarText: '',
-            snackbarTimeout: 3000
+      snackbarText: '',
+      snackbarTimeout: 3000
     };
   },
   methods: {
@@ -155,16 +171,23 @@ export default {
     },
 
     async completarRegistroCompleto() {
+      this.confirmDialog = true; // Mostrar el diálogo de confirmación
+    },
+
+    async confirmarRegistro() {
+      // Aquí iría la lógica para completar el registro si el usuario confirma
+      this.confirmDialog = false; // Cerrar el diálogo de confirmación
       try {
         // Primero, registra al alumno
         await this.registerAlumno();
         // Si el registro fue exitoso, procede a subir los documentos
         await this.completarRegistro();
         // Si todo fue exitoso, puedes hacer algo más aquí, como mostrar un mensaje de éxito
-        alert('Registro y subida de documentos completados con éxito');
+        window.location.href = '/completeform_acad';
+
       } catch (error) {
         console.error('Hubo un error durante el proceso:', error);
-      }
+      } // Llamar a la función de completar registro
     },
 
     // Asegúrate de que registerAlumno devuelva una promesa
@@ -176,11 +199,8 @@ export default {
           nombre: this.alumno.nombre,
           carrera: this.alumno.carrera,
           anio_egreso: this.anioEgreso,
-          caja: this.numeroCaja,
+          caja: this.numeroCaja.toUpperCase(), // Convertir a mayúsculas
           observaciones: this.observaciones,
-          snackbar: false,
-          snackbarText: '',
-          snackbarTimeout: 3000,
         };
 
         axios.post(url, alumnoData)
@@ -227,12 +247,13 @@ export default {
       });
     },
 
-
     abrirDialogoParaEditar(index) {
       this.archivo = { ...this.archivosList[index] };
       this.esEdicion = true;
       this.indiceEdicion = index;
       this.dialog = true;
+
+
     },
 
     agregarEditarArchivo() {
@@ -240,6 +261,17 @@ export default {
         this.showSnackbar("Por favor, completa todos los campos.");
         return;
       }
+
+      // Verificar duplicados por tipo y grado
+      const duplicado = this.archivosList.some(archivo =>
+        archivo.grado === this.archivo.grado && archivo.tipoDocumento === this.archivo.tipoDocumento
+      );
+
+      if (duplicado) {
+        this.showSnackbar("Ya existe un documento con el mismo tipo y grado.");
+        return;
+      }
+
       if (this.esEdicion) {
         // Encuentra el índice del archivo a editar en archivosList
         const index = this.archivosList.findIndex(a => a.codigo === this.archivo.codigo);
@@ -255,7 +287,6 @@ export default {
       this.dialog = false;
       this.resetArchivo();
     },
-
 
     eliminarArchivo(codigo) {
       const index = this.archivosList.findIndex(a => a.codigo === codigo);

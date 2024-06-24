@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -16,7 +16,7 @@ const showingNavigationDropdown = ref(false);
         height="280vh">
         <div>
             <div class="min-h-screen">
-                <nav class="bg-dark dark:bg-sky-900">
+                <nav class="bg-dark dark:bg-blue-700 ">
                     <!-- Primary Navigation Menu -->
                     <div class="max-w-5xl mx-auto px-2 sm:px-2 lg:px-6">
                         <div class="flex justify-between h-16">
@@ -24,14 +24,16 @@ const showingNavigationDropdown = ref(false);
                                 <!-- Logo -->
                                 <div class="shrink-0 flex items-center">
                                     <Link :href="route('dashboard')">
-                                    <ApplicationLogo class="block h-9 w-auto fill-current text-dark-900" />
+                                    <v-avatar size="50">
+                                        <img src="/images/undac_logo.png" alt="avatar">
+                                    </v-avatar>
                                     </Link>
                                 </div>
 
                                 <!-- Navigation Links -->
                                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                     <NavLink :href="route('dashboard')" :active="route().current('dashboard')"
-                                        class="text-gray-200 ">
+                                        class="text-gray-100 ">
                                         ARCHIVO CENTRAL
                                     </NavLink>
                                 </div>
@@ -44,9 +46,7 @@ const showingNavigationDropdown = ref(false);
                                     <Dropdown align="right" width="48">
                                         <template #trigger>
                                             <span class="inline-flex rounded-md">
-                                                <v-btn icon>
-                                                    <v-icon size="36" color="sky">mdi-account-circle</v-icon>
-                                                </v-btn>
+                                                <v-btn icon="mdi-account" color="blue-darken-1"></v-btn>
                                             </span>
                                         </template>
 

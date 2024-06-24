@@ -16,14 +16,17 @@ function redirectTo(routeName) {
 
 <template>
 
-    <Head title="Actualizar" />
+    <Head title="Actualizar Documentos Académicos" />
 
     <AuthenticatedLayout>
         <div class="my-8">
             <v-card class="mx-auto" max-width="1000">
-                <v-toolbar color="blue-grey-darken-4">
+                <v-toolbar color="blue-darken-3">
                     <v-btn icon="mdi-arrow-left" @click="redirectTo('return')" class="text-none" density="compact"></v-btn>
-                    <v-toolbar-title class="text-gray-100">Actualizar Documentos</v-toolbar-title>
+                    <v-toolbar-title class="text-gray-100">
+                        Actualizar
+                        <span class="text-sm text-gray-300 ml-2">Documentos Académicos</span>
+                    </v-toolbar-title>
                 </v-toolbar>
                 <v-list>
                     <AlumnoUpdate></AlumnoUpdate>

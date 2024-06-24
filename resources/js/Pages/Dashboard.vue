@@ -11,7 +11,7 @@ import { Head } from '@inertiajs/vue3';
     <AuthenticatedLayout>
         <div class="my-8">
             <v-card class="mx-auto" max-width="1000">
-                <v-card-item class="bg-dark dark:bg-sky-900">
+                <v-card-item class="bg-dark dark:bg-blue-700">
                     <v-card-title>
                         <span class="text-gray-100">Mis Acciones</span>
                     </v-card-title>
