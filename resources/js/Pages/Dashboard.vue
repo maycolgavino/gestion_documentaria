@@ -10,16 +10,16 @@ import { Head } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <div class="my-8">
-            <v-card class="mx-auto" max-width="1000">
-                <v-card-item class="bg-dark dark:bg-blue-700">
-                    <v-card-title>
-                        <span class="text-gray-100">Mis Acciones</span>
-                    </v-card-title>
-                </v-card-item>
+
+            <v-card class="mx-auto" max-width="1000" variant="flat">
+                <v-toolbar color="blue-darken-3">
+                    <v-toolbar-title class="text-gray-100">
+                        Mis Acciones
+                    </v-toolbar-title>
+                </v-toolbar>
                 <v-card-item class="bg-dark dark:bg-neutral-50" >
                     <main-component></main-component>
                 </v-card-item>
-                
             </v-card>
         </div>
 

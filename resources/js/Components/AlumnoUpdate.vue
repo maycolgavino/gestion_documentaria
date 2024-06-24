@@ -152,7 +152,7 @@
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
-                                <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="blue-darken-3" @click="agregarEditarArchivo">Agregar</v-btn>
+                                <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="blue-darken-3" @click="agregarDocumento">Agregar</v-btn>
                                 <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="red-darken-4" @click="dialog = false">Cancelar</v-btn>
                             </v-card-actions>
                         </v-card>
@@ -177,8 +177,8 @@
                 <v-card-title>Confirmar Completar Registro</v-card-title>
                 <v-card-text>¿Estás seguro de que deseas completar el registro?</v-card-text>
                 <v-card-actions>
-                    <v-btn color="green darken-1" text @click="completarRegistro">Sí</v-btn>
-                    <v-btn color="grey darken-1" text @click="confirmDialogComplete = false">Cancelar</v-btn>
+                    <v-btn color="blue-darken-3" variant="outlined" @click="completarRegistro">Sí</v-btn>
+                    <v-btn color="red-darken-2" variant="elevated" @click="confirmDialogComplete = false">Cancelar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -191,7 +191,7 @@
         <v-card-actions v-if="alumno">
             <v-spacer></v-spacer>
             <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
-                @click="confirmDialog = true">
+                @click="dialogoCompleto">
                 Completar Registro
                 <v-icon right>mdi-chevron-right</v-icon>
             </v-btn>

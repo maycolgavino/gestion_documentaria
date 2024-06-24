@@ -12,7 +12,7 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <v-parallax
-        src="https://images.unsplash.com/photo-1481151500463-1fa2dd2d5dbe?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8b2ZmaWNlJTIwZGFya3xlbnwwfHwwfHx8MA%3D%3D"
+        src="/images/background.jpg"
         height="280vh">
         <div>
             <div class="min-h-screen">
@@ -104,7 +104,7 @@ const showingNavigationDropdown = ref(false);
                                     Profile
                                 </ResponsiveNavLink>
                                 <ResponsiveNavLink :href="route('logout')" method="post" as="button"
-                                    class="text-gray-600 hover:text-blue-600"> Log Out </ResponsiveNavLink>
+                                    class="text-gray-600 hover:text-blue-700"> Log Out </ResponsiveNavLink>
                             </div>
                         </div>
                     </div>

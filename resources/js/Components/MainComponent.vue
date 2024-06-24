@@ -1,15 +1,15 @@
 <template>
     <div>
         <!-- Academic Search -->
-        <v-card class="mx-auto" max-width="900" variant="plain" >
-            <v-list lines="three" >
+        <v-card class=" mx-auto " max-width="900" variant="text">
+            <v-list lines="three">
                 <v-list-item>
                     <template v-slot:title>
                         Búsqueda Documentos Académicos
                     </template>
                     <template v-slot:prepend>
                         <v-avatar size="64" rounded="0">
-                            <v-icon color="blue-grey-darken-2" size="48">mdi-school</v-icon>
+                            <v-icon color="blue-darken-3" size="48">mdi-school</v-icon>
                         </v-avatar>
                     </template>
                     <template v-slot:subtitle>
@@ -18,23 +18,20 @@
                         <div class="mt-2">
                             <v-row>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none" color="blue-grey-darken-4" 
-                                    rounded="sm" variant="outlined" prepend-icon="mdi-pencil"
-                                        @click="redirectTo('agregar_ac')">
-                                        Agregar
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" rounded="sm" variant="outlined"
+                                        prepend-icon="mdi-pencil" @click="redirectTo('agregar_ac')">
+                                        Agregar 
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none" color="blue-grey-darken-4" variant="text" 
-                                    prepend-icon="mdi-clipboard-text-search"
-                                        @click="redirectTo('busqueda_ac')">
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" variant="elevated"
+                                        prepend-icon="mdi-clipboard-text-search" @click="redirectTo('busqueda_ac')">
                                         Búsqueda
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none" color="blue-grey-darken-4" variant="text" 
-                                    prepend-icon="mdi-update"
-                                        @click="redirectTo('actualizar_ac')">
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" variant="elevated"
+                                        prepend-icon="mdi-update" @click="redirectTo('actualizar_ac')">
                                         Actualizar
                                     </v-btn>
                                 </v-col>
@@ -51,7 +48,7 @@
                     </template>
                     <template v-slot:prepend>
                         <v-avatar size="64" rounded="0">
-                            <v-icon color="blue-grey-darken-2" size="48">mdi-file-document</v-icon>
+                            <v-icon color="blue-darken-3" size="48">mdi-file-document</v-icon>
                         </v-avatar>
                     </template>
                     <template v-slot:subtitle>
@@ -60,17 +57,15 @@
                         <div class="mt-2">
                             <v-row>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none " color="blue-grey-darken-4" 
-                                    rounded="sm" variant="outlined"
-                                        prepend-icon="mdi-pencil"
-                                        @click="redirectTo('agregar_ad')">
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" rounded="sm" variant="outlined"
+                                        prepend-icon="mdi-pencil" @click="redirectTo('agregar_ad')">
                                         Agregar
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none " color="blue-grey-darken-4" variant="text" 
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" variant="elevated"
                                         @click="redirectTo('busqueda_ad')" prepend-icon="mdi-clipboard-text-search">
-                                        Búsqueda 
+                                        Búsqueda
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -86,7 +81,7 @@
                     </template>
                     <template v-slot:prepend>
                         <v-avatar size="64" rounded="0">
-                            <v-icon color="blue-grey-darken-2" size="48">mdi-note-text-outline</v-icon>
+                            <v-icon color="blue-darken-3" size="48">mdi-note-text-outline</v-icon>
                         </v-avatar>
                     </template>
                     <template v-slot:subtitle>
@@ -95,17 +90,14 @@
                         <div class="mt-2">
                             <v-row>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none " color="blue-grey-darken-4" 
-                                    rounded="sm" variant="outlined"
-                                    prepend-icon="mdi-pencil"
-                                        @click="redirectTo('agregar_sb')">
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" rounded="sm" variant="outlined"
+                                        prepend-icon="mdi-pencil" @click="redirectTo('agregar_sb')">
                                         Agregar
                                     </v-btn>
                                 </v-col>
                                 <v-col cols="auto">
-                                    <v-btn class="text-none " color="blue-grey-darken-4" variant="text" 
-                                        prepend-icon="mdi-clipboard-text-search"
-                                        @click="redirectTo('busqueda_sb')">
+                                    <v-btn class="text-none text-subtitle-2" color="blue-darken-3" variant="elevated"
+                                        prepend-icon="mdi-clipboard-text-search" @click="redirectTo('busqueda_sb')">
                                         Búsqueda
                                     </v-btn>
                                 </v-col>

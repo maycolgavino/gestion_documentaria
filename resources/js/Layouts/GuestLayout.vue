@@ -5,8 +5,7 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <v-parallax
-        src="https://images.unsplash.com/photo-1481151500463-1fa2dd2d5dbe?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8b2ZmaWNlJTIwZGFya3xlbnwwfHwwfHx8MA%3D%3D"
-        height="100vh">
+    src="/images/background.jpg" height="100vh">
         <div
             class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
             <div>
@@ -16,7 +15,7 @@ import { Link } from '@inertiajs/vue3';
             </div>
 
             <div
-                class="w-full sm:max-w-md mt-6 px-6 py-4 bg-dark dark:bg-blue-700 shadow-md overflow-hidden sm:rounded-lg">
+                class="w-full sm:max-w-md mt-6 px-6 py-4 bg-dark dark:bg-sky-900 shadow-md overflow-hidden sm:rounded-lg">
                 <slot />
             </div>
         </div>

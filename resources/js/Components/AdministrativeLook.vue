@@ -83,7 +83,7 @@ export default {
                 color: 'error',
                 timeout: 6000
             },
-            tiposResolucion: ["Resolución Directorial Administrativa", "Resolucion de Asamblea Universitaria", "Resolucion Rectoral", "Resolucion de Consejo Universitario"],
+            tiposResolucion: ["Resolucion Directorial Administrativa", "Resolucion de Asamblea Universitaria", "Resolucion Rectoral", "Resolucion de Consejo Universitario"],
             aniosDisponibles: Array.from({ length: 2024 - 1965 + 1 }, (v, k) => 2024 - k)
         };
     },
