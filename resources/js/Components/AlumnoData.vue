@@ -12,22 +12,60 @@
         variant="outlined" :rules="[rules.required, rules.onlyNumbers, rules.length(8)]" v-model="alumno.dni"
         maxlength="8" color="blue-darken-3"></v-text-field>
 
+      <v-text-field density="compact" placeholder="Codigo de Matricula"
+        prepend-inner-icon="mdi-ticket-confirmation-outline" variant="outlined"
+        :rules="[rules.required, rules.onlyNumbers, rules.length(10)]" v-model="alumno.matricula_code" maxlength="10"
+        color="blue-darken-3"></v-text-field>
+
       <v-text-field density="compact" placeholder="Carrera del Estudiante" prepend-inner-icon="mdi-account-school"
-        variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90"
-        v-model="alumno.carrera" color="blue-darken-3"></v-text-field>
+        variant="outlined" :rules="[rules.required, rules.maxLength(90)]" :counter="90" v-model="alumno.carrera"
+        color="blue-darken-3"></v-text-field>
 
       <!-- Campos adicionales en la parte superior -->
       <v-row>
         <v-col cols="12" md="6">
           <v-text-field density="compact" placeholder="Código de Caja" prepend-inner-icon="mdi-archive-outline"
-            variant="outlined" :rules="[rules.required, rules.boxCode]" v-model="numeroCaja"
-            maxlength="2" color="blue-darken-3"></v-text-field>
+            variant="outlined" :rules="[rules.required, rules.boxCode]" v-model="numeroCaja" maxlength="6"
+            color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
           <v-select density="compact" placeholder="Año" prepend-inner-icon="mdi-calendar-range" variant="outlined"
             :items="aniosDisponibles" v-model="anioEgreso" color="blue-darken-3"></v-select>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Bachiller" prepend-inner-icon="mdi-school"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_bachiller" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Título" prepend-inner-icon="mdi-certificate"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_titulo" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Maestría" prepend-inner-icon="mdi-school"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_maestria" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Doctorado" prepend-inner-icon="mdi-school"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_doctorado" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Especialidad 1" prepend-inner-icon="mdi-school"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_especialidad1" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field density="compact" placeholder="Año de Especialidad 2" prepend-inner-icon="mdi-school"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_especialidad2" maxlength="4"
+            color="blue-darken-3"></v-text-field>
+        </v-col>
+      </v-row>
+
     </v-container>
 
     <v-divider></v-divider>
@@ -66,8 +104,8 @@
     </div>
 
     <div class="text-center pa-4">
-      <v-btn class="mr-4 text-none text-subtitle-1" variant="outlined" color="blue-darken-3"
-        prepend-icon="mdi-plus-box" stacked @click="dialog = true">Agregar Documento</v-btn>
+      <v-btn class="mr-4 text-none text-subtitle-1" variant="outlined" color="blue-darken-3" prepend-icon="mdi-plus-box"
+        stacked @click="dialog = true">Agregar Documento</v-btn>
 
       <v-dialog v-model="dialog" width="440" persistent>
         <v-card max-width="740">
@@ -76,15 +114,18 @@
           </v-card-title>
           <v-card-text>
             <v-container>
-              <v-select  variant="outlined" v-model="archivo.grado" :items="grados" label="Grado" required color="blue-darken-3"></v-select>
-              <v-select  variant="outlined" v-model="archivo.tipoDocumento" :items="tiposDocumento" label="Tipo de Documento"
-                required color="blue-darken-3"></v-select>
+              <v-select variant="outlined" v-model="archivo.grado" :items="grados" label="Grado" required
+                color="blue-darken-3"></v-select>
+              <v-select variant="outlined" v-model="archivo.tipoDocumento" :items="tiposDocumento"
+                label="Tipo de Documento" required color="blue-darken-3"></v-select>
               <input type="file" @change="onFileSelected" class="file-input" />
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="blue-darken-3" @click="agregarEditarArchivo">Agregar</v-btn>
-            <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="red-darken-4" @click="dialog = false">Cancelar</v-btn>
+            <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="blue-darken-3"
+              @click="agregarEditarArchivo">Agregar</v-btn>
+            <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="red-darken-4"
+              @click="dialog = false">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -95,9 +136,15 @@
       <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
     </v-snackbar>
 
+    <v-text-field density="compact" placeholder="Observaciones Adicionales" prepend-inner-icon="mdi-note"
+      variant="outlined" :rules="[rules.maxLength(255)]" :counter="255" v-model="observaciones"
+      color="blue-darken-3"></v-text-field>
+
     <v-dialog v-model="confirmDialog" max-width="400">
       <v-card>
-        <v-card-title><div class="text-center" style="font-weight: bold; ">Confirmar Registro</div></v-card-title>
+        <v-card-title>
+          <div class="text-center" style="font-weight: bold; ">Confirmar Registro</div>
+        </v-card-title>
         <v-card-text>
           ¿Estás seguro de completar el registro?
         </v-card-text>
@@ -111,10 +158,10 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
-                @click="confirmDialog = true">
-                Completar Registro
-                <v-icon right>mdi-chevron-right</v-icon>
-            </v-btn>
+        @click="confirmDialog = true">
+        Completar Registro
+        <v-icon right>mdi-chevron-right</v-icon>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -124,6 +171,7 @@ import axios from 'axios';
 
 export default {
   data() {
+    const currentYear = new Date().getFullYear();
     return {
       archivosParaSubir: [],
       dialog: false,
@@ -131,15 +179,25 @@ export default {
       proximoCodigo: 1,
       archivosList: [],
       alumno: {
+        matricula_code: '',
         nombre: '',
         dni: '',
         carrera: '',
+        observaciones: '',
       },
       archivo: {
         grado: '',
         tipoDocumento: '',
         documento: null,
         codigo: 1,
+      },
+      grados: {
+        anio_bachiller: '',
+        anio_titulo: '',
+        anio_maestria: '',
+        anio_doctorado: '',
+        anio_especialidad1: '',
+        anio_especialidad2: '',
       },
       archivos: {},
       esEdicion: false,
@@ -149,13 +207,17 @@ export default {
       observaciones: '',
       grados: ["BACHILLER", "TITULO", "MAESTRIA", "DOCTORADO", "ESPECIALIDAD", "ESPECIALIDAD 2", "CONVALIDACION", "ALUMNO"],
       tiposDocumento: ["ACTA", "RESOLUCION", "DIPLOMA", "DNI", "CERTIFICADO DE ESTUDIOS", "CONSTANCIA DE INGRESO"],
-      aniosDisponibles: Array.from({ length: 2024 - 1965 + 1 }, (v, k) => 2024 - k),
+      aniosDisponibles: Array.from({ length: currentYear - 1965 + 1 }, (v, k) => currentYear - k),
       rules: {
         required: (value) => !!value || 'Este campo es requerido',
         length: (length) => (value) => (value && value.length === length) || `Debe tener ${length} caracteres`,
         maxLength: (maxLength) => (value) => (value && value.length <= maxLength) || `No debe exceder los ${maxLength} caracteres`,
         onlyNumbers: (value) => /^\d+$/.test(value) || 'Solo se permiten números',
-        boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
+        onlyNumbersOrEmpty: (value) => {
+          const currentYear = new Date().getFullYear();
+          return value === '' || (value.length === 4 && /^\d+$/.test(value) && value >= 1965 && value <= currentYear) || `Debe ser un número de 4 dígitos entre 1965 y ${currentYear}`;
+        },
+        //boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
       },
       snackbar: false,
       snackbarText: '',
@@ -170,51 +232,61 @@ export default {
       }
     },
 
-    async completarRegistroCompleto() {
-      this.confirmDialog = true; // Mostrar el diálogo de confirmación
-    },
-
     async confirmarRegistro() {
-      // Aquí iría la lógica para completar el registro si el usuario confirma
       this.confirmDialog = false; // Cerrar el diálogo de confirmación
       try {
         // Primero, registra al alumno
         await this.registerAlumno();
-        // Si el registro fue exitoso, procede a subir los documentos
-        await this.completarRegistro();
-        // Si todo fue exitoso, puedes hacer algo más aquí, como mostrar un mensaje de éxito
+
+        // Si hay documentos para subir, procede a subirlos
+        if (this.archivosList.length > 0) {
+          await this.completarRegistro();
+        }
+
+        // Mostrar el mensaje de éxito
         window.location.href = '/completeform_acad';
 
       } catch (error) {
         console.error('Hubo un error durante el proceso:', error);
-      } // Llamar a la función de completar registro
+      }
     },
 
     // Asegúrate de que registerAlumno devuelva una promesa
     registerAlumno() {
       return new Promise((resolve, reject) => {
-        const url = '/register_student'; // Asegúrate de usar la URL correcta para tu API
+        const url = '/register_student';
+
+        // Asegúrate de que los campos de los grados estén definidos, incluso si están vacíos
         const alumnoData = {
           dni: this.alumno.dni,
+          matricula_code: this.alumno.matricula_code,
           nombre: this.alumno.nombre,
           carrera: this.alumno.carrera,
           anio_egreso: this.anioEgreso,
-          caja: this.numeroCaja.toUpperCase(), // Convertir a mayúsculas
+          caja: this.numeroCaja.toUpperCase(),
           observaciones: this.observaciones,
+          // Verificar si cada campo de grado está presente, de lo contrario asignar null
+          anio_bachiller: this.grados.anio_bachiller || null,
+          anio_titulo: this.grados.anio_titulo || null,
+          anio_maestria: this.grados.anio_maestria || null,
+          anio_doctorado: this.grados.anio_doctorado || null,
+          anio_especialidad1: this.grados.anio_especialidad1 || null,
+          anio_especialidad2: this.grados.anio_especialidad2 || null,
         };
 
         axios.post(url, alumnoData)
           .then(response => {
             console.log('Alumno registrado:', response.data);
-            resolve(response); // Resuelve la promesa si el registro fue exitoso
+            resolve(response);
           })
           .catch(error => {
             this.showSnackbar("Por favor, completa todos los campos.");
             console.error('Error durante el registro del alumno:', error);
-            reject(error); // Rechaza la promesa si hubo un error
+            reject(error);
           });
       });
     },
+
 
     // Asegúrate de que completarRegistro devuelva una promesa
     completarRegistro() {

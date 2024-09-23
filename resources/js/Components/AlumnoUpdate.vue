@@ -1,8 +1,8 @@
 <template>
     <v-card class="mx-auto" max-width="944" variant="flat">
         <v-container>
-            <v-text-field v-model="searchDni" dense placeholder="Buscar por DNI" prepend-inner-icon="mdi-magnify"
-                variant="outlined" @keyup.enter="buscarAlumno" maxlength="8">
+            <v-text-field v-model="searchAlum" dense placeholder="Buscar por DNI, Código de Matricula, Nombre Completo" prepend-inner-icon="mdi-magnify"
+                variant="outlined" @keyup.enter="buscarAlumno" >
             </v-text-field>
             <div class="d-flex justify-center">
                 <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
@@ -24,6 +24,7 @@
                     <div class="text-center">Detalles del Estudiante</div>
                 </v-card-title>
                 <v-divider></v-divider>
+                <!-- Botón de lápiz para editar -->
                 <v-table>
                     <thead>
                         <tr>
@@ -58,16 +59,114 @@
 
                                     <v-list-item>
                                         <v-list-item-content>
+                                            <v-list-item-title class="font-weight-bold">DNI:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.dni }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title class="font-weight-bold">Código de Matricula:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.matricula_code }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
                                             <v-list-item-title
                                                 class="font-weight-bold">Observaciones:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.observaciones }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Bachiller:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_bachiller }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Titulo:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_titulo }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Maestria:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_maestria }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Doctorado:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_doctorado }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Especialidad 1:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_especialidad1 }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Especialidad 2:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_especialidad2 }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
                                 </v-list>
                             </th>
                         </tr>
                     </thead>
+                    <v-btn icon @click="openDialog" class="justify-center">
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
                 </v-table>
+                <!-- Dialogo para editar los campos -->
+                <v-dialog v-model="Editdialog" max-width="600px">
+                    <v-card>
+                        <v-card-title class="headline">Editar Datos</v-card-title>
+                        <v-card-text>
+                            <v-form ref="form">
+                                <v-text-field label="Nombre" v-model="editedStudent.nombre"></v-text-field>
+                                <v-text-field label="Carrera" v-model="editedStudent.carrera"></v-text-field>
+                                <v-text-field label="DNI" v-model="editedStudent.dni"></v-text-field>
+                                <v-text-field label="Código de Matrícula"
+                                    v-model="editedStudent.matricula_code"></v-text-field>
+                                <v-text-field label="Año de Egreso" v-model="editedStudent.anio_egreso"></v-text-field>
+                                <v-text-field label="Caja de Documentos" v-model="editedStudent.caja"></v-text-field>
+
+                                <v-text-field label="Año de Bachiller" v-model="editedStudent.anio_bachiller"></v-text-field>
+                                <v-text-field label="Año de Titulo" v-model="editedStudent.anio_titulo"></v-text-field>
+                                <v-text-field label="Año de Maestria" v-model="editedStudent.anio_maestria"></v-text-field>
+                                <v-text-field label="Año de Doctorado" v-model="editedStudent.anio_doctorado"></v-text-field>
+                                <v-text-field label="Año de Especialidad 1" v-model="editedStudent.anio_especialidad1"></v-text-field>
+                                <v-text-field label="Año de Especialidad 2" v-model="editedStudent.anio_especialidad2"></v-text-field>
+
+                                <v-textarea label="Observaciones" v-model="editedStudent.observaciones"></v-textarea>
+
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="closeDialog">Cancelar</v-btn>
+                            <v-btn color="blue darken-1" text @click="saveChanges">Guardar</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-card>
         </div>
 
@@ -152,8 +251,10 @@
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
-                                <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="blue-darken-3" @click="agregarDocumento">Agregar</v-btn>
-                                <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="red-darken-4" @click="dialog = false">Cancelar</v-btn>
+                                <v-btn class="mr-4 text-none text-body-1" variant="elevated" color="blue-darken-3"
+                                    @click="agregarDocumento">Agregar</v-btn>
+                                <v-btn class="mr-4 text-none text-body-1" variant="outlined" color="red-darken-4"
+                                    @click="dialog = false">Cancelar</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -178,7 +279,8 @@
                 <v-card-text>¿Estás seguro de que deseas completar el registro?</v-card-text>
                 <v-card-actions>
                     <v-btn color="blue-darken-3" variant="outlined" @click="completarRegistro">Sí</v-btn>
-                    <v-btn color="red-darken-2" variant="elevated" @click="confirmDialogComplete = false">Cancelar</v-btn>
+                    <v-btn color="red-darken-2" variant="elevated"
+                        @click="confirmDialogComplete = false">Cancelar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -206,14 +308,16 @@ export default {
     data() {
         return {
             alumno: null,
-            searchDni: '',
+            searchAlum: '',
             archivosList: [],
             archivosListNew: [],
+            Editdialog: false,
             dialog: false,
             confirmDialog: false,
             confirmDialogComplete: false,
             archivoIdAEliminar: null,
             archivosParaEliminar: [],
+            editedStudent: {},
             documento: {
                 grado: '',
                 tipoDocumento: '',
@@ -267,8 +371,33 @@ export default {
                     });
             });
         },
+        openDialog() {
+            // Clonar los datos del estudiante actual para editarlos en el dialog
+            this.editedStudent = { ...this.alumno };
+            this.Editdialog = true;
+        },
+        closeDialog() {
+            this.Editdialog = false;
+        },
+        async saveChanges() {
+            try {
+                // Aquí puedes llamar a tu controlador para guardar los datos actualizados
+                await this.saveStudentData();
+                this.Editdialog = false;
+                this.snackbarSuccess = true; // Mostrar mensaje de éxito
+            } catch (error) {
+                console.error('Error al guardar los cambios:', error);
+                this.snackbarError = true; // Mostrar mensaje de error
+            }
+        },
+        async saveStudentData() {
+            // Asegúrate de que la URL y el método HTTP sean correctos según tu API
+            const updateUrl = '/update_student';
+            const response = await axios.post(updateUrl, this.editedStudent);
+            return response.data;
+        },
         buscarAlumno() {
-            axios.get(`/acad_details`, { params: { dni: this.searchDni } })
+            axios.get(`/acad_details`, { params: { search: this.searchAlum } })
                 .then(response => {
                     if (response.data.alumno) {
                         this.alumno = response.data.alumno;

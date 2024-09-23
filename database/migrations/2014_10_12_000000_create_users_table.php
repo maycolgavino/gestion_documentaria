@@ -21,15 +21,23 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::create('alumno', function (Blueprint $table) {
-            $table->string('dni')->primary(); // Usando string por si el DNI tiene ceros al principio
-            $table->string('email'); // Clave foránea que se relacionará con users
+            $table->id();
+            $table->string('dni')->unique(); // Usando string por si el DNI tiene ceros al principio
+            $table->string('matricula_code'); // Usando string por si el DNI tiene ceros al principio
+            //$table->string('email'); // Clave foránea que se relacionará con users
             $table->string('nombre');
             $table->string('carrera');
             $table->timestamps(); // Opcional, si deseas tener control sobre las fechas de creación/actualización
             $table->year('anio_egreso');
             $table->string('caja');
             $table->text('observaciones')->nullable();
-            $table->foreign('email')->references('email')->on('users');
+            $table->year('anio_bachiller')->nullable();
+            $table->year('anio_titulo')->nullable();
+            $table->year('anio_maestria')->nullable();
+            $table->year('anio_doctorado')->nullable();
+            $table->year('anio_especialidad1')->nullable();
+            $table->year('anio_especialidad2')->nullable();
+            //$table->foreign('email')->references('email')->on('users');
         });
 
         Schema::create('doc_alumno', function (Blueprint $table) {

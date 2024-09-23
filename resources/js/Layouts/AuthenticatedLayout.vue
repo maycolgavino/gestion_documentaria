@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <v-parallax
         src="/images/background.jpg"
-        height="280vh">
+        height="480vh">
         <div>
             <div class="min-h-screen">
                 <nav class="bg-dark dark:bg-blue-700 ">

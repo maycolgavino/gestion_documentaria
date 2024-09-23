@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Academic/AcademicUpdate');
     })->name('actualizar_academico');
     Route::post('/update_documents', [DocumentAcademicController::class, 'updateDocuments']);
+    Route::post('/update_student', [DocumentAcademicController::class, 'updateStudent']);
 
     Route::get('/look_ac', function () {
         return Inertia::render('Academic/AcademicSearch');

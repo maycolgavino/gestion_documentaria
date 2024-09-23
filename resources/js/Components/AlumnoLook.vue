@@ -1,8 +1,8 @@
 <template>
-    <v-card class="mx-auto" max-width="944" variant="flat">
+    <v-card class="mx-auto" max-width="2044" variant="flat">
         <v-container>
-            <v-text-field v-model="searchDni" dense placeholder="Buscar por DNI" prepend-inner-icon="mdi-magnify"
-                variant="outlined" @keyup.enter="buscarAlumno" maxlength="8" color="blue-darken-3">
+            <v-text-field v-model="searchAlum" dense placeholder="Buscar por DNI, Código de Matricula, Nombre Completo" prepend-inner-icon="mdi-magnify"
+                variant="outlined" @keyup.enter="buscarAlumno" >
             </v-text-field>
             <div class="d-flex justify-center">
                 <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
@@ -19,7 +19,7 @@
         </v-container>
 
         <div class="d-flex justify-center">
-            <v-card v-if="alumno" class="mb-4" variant="tonal" max-width="600px">
+            <v-card v-if="alumno" class="mb-4" variant="tonal" max-width="3000px">
                 <v-card-title class="justify-center">
                     <div class="text-center">Detalles del Estudiante</div>
                 </v-card-title>
@@ -58,11 +58,74 @@
 
                                     <v-list-item>
                                         <v-list-item-content>
+                                            <v-list-item-title class="font-weight-bold">DNI:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.dni }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title class="font-weight-bold">Código de Matricula:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.matricula_code }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
                                             <v-list-item-title
                                                 class="font-weight-bold">Observaciones:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.observaciones }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Bachiller:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_bachiller }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Titulo:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_titulo }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Maestria:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_maestria }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Doctorado:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_doctorado }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Especialidad 1:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_especialidad1 }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title
+                                                class="font-weight-bold">Año de Especialidad 2:</v-list-item-title>
+                                            <v-list-item-subtitle>{{ alumno.anio_especialidad2 }}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+
                                 </v-list>
                             </th>
                         </tr>
@@ -113,7 +176,7 @@ export default {
     data() {
         return {
             alumno: null,
-            searchDni: '', // Almacena la consulta de búsqueda
+            searchAlum: '', // Almacena la consulta de búsqueda
             archivosList: [], // Almacena los resultados de la búsqueda
             snackbarError: false, // Controla la visibilidad del snackbar de error
             snackbarSuccess: false, // Controla la visibilidad del snackbar de éxito
@@ -123,7 +186,7 @@ export default {
     methods: {
         // Método para buscar sílabos basado en la consulta
         buscarAlumno() {
-            axios.get(`/acad_details`, { params: { dni: this.searchDni } })
+            axios.get(`/acad_details`, { params: { search: this.searchAlum } })
                 .then(response => {
                     if (response.data.alumno) {
                         this.alumno = response.data.alumno;
