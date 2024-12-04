@@ -1,5 +1,6 @@
 <?php
 
+// Modelo actualizado para Alumno
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class alumno extends Model
 {
     protected $table = 'alumno';
-    // public $incrementing = false; // Si no usas un integer auto-incremental como PK
     protected $primaryKey = 'id';
     protected $fillable = [
         'id',
@@ -15,9 +15,8 @@ class alumno extends Model
         'nombre',
         'matricula_code',
         'carrera',
-        'email',
-        'anio_egreso',
         'caja',
+        'num_registros_caja',
         'observaciones',
         'anio_bachiller',
         'anio_titulo',
@@ -32,4 +31,13 @@ class alumno extends Model
     {
         return $this->hasMany(DocAlumno::class, 'dni', 'dni');
     }
+
+    // Método para incrementar el contador de registros en una caja
+    // public static function incrementarRegistrosCaja($caja)
+    // {
+    //     $alumno = self::where('caja', $caja)->first();
+    //     if ($alumno) {
+    //         $alumno->increment('num_registros_caja');
+    //     }
+    // }
 }

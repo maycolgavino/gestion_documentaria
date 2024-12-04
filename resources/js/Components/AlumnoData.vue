@@ -22,46 +22,59 @@
         color="blue-darken-3"></v-text-field>
 
       <!-- Campos adicionales en la parte superior -->
-      <v-row>
-        <v-col cols="12" md="6">
-          <v-text-field density="compact" placeholder="Código de Caja" prepend-inner-icon="mdi-archive-outline"
-            variant="outlined" :rules="[rules.required, rules.boxCode]" v-model="numeroCaja" maxlength="6"
-            color="blue-darken-3"></v-text-field>
+      <v-row align="center" class="d-flex">
+        <v-col cols="auto">
+          <!-- Campo Prefijo (No editable) -->
+          <v-text-field density="compact" label="Código de Caja" variant="outlined" readonly :value="codigoCajaPrefix"
+            persistent-placeholder color="blue-darken-3" hide-details class="mb-0"
+            style="max-width: 60px;"></v-text-field>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-select density="compact" placeholder="Año" prepend-inner-icon="mdi-calendar-range" variant="outlined"
-            :items="aniosDisponibles" v-model="anioEgreso" color="blue-darken-3"></v-select>
+
+        <v-col cols="auto">
+          <span class="mr-2">-</span>
+        </v-col>
+
+        <v-col cols="auto">
+          <!-- Campo Sufijo (Editable) -->
+          <v-text-field density="compact" placeholder="Número" variant="outlined"
+            :rules="[rules.required, rules.onlyNumbers, rules.maxLength(6)]" v-model="codigoCajaSuffix" maxlength="6"
+            color="blue-darken-3" hide-details class="mb-0" style="max-width: 120px;"></v-text-field>
+        </v-col>
+
+        <v-col cols="auto">
+          <div class="ml-3" style="color: #1E88E5;">Registros en Caja: {{ contadorCaja }}</div>
         </v-col>
       </v-row>
+
       <v-row>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Bachiller" prepend-inner-icon="mdi-school"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_bachiller" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_bachiller" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Título" prepend-inner-icon="mdi-certificate"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_titulo" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_titulo" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Maestría" prepend-inner-icon="mdi-school"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_maestria" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_maestria" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Doctorado" prepend-inner-icon="mdi-school"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_doctorado" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_doctorado" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Especialidad 1" prepend-inner-icon="mdi-school"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_especialidad1" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_especialidad1" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field density="compact" placeholder="Año de Especialidad 2" prepend-inner-icon="mdi-school"
-            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="grados.anio_especialidad2" maxlength="4"
+            variant="outlined" :rules="[rules.onlyNumbersOrEmpty]" v-model="gradosData.anio_especialidad2" maxlength="4"
             color="blue-darken-3"></v-text-field>
         </v-col>
       </v-row>
@@ -137,7 +150,7 @@
     </v-snackbar>
 
     <v-text-field density="compact" placeholder="Observaciones Adicionales" prepend-inner-icon="mdi-note"
-      variant="outlined" :rules="[rules.maxLength(255)]" :counter="255" v-model="observaciones"
+      variant="outlined" :rules="[rules.maxLength(255)]" :counter="0" v-model="alumno.observaciones"
       color="blue-darken-3"></v-text-field>
 
     <v-dialog v-model="confirmDialog" max-width="400">
@@ -191,7 +204,7 @@ export default {
         documento: null,
         codigo: 1,
       },
-      grados: {
+      gradosData: { // Renombrado para evitar conflicto con la lista de grados
         anio_bachiller: '',
         anio_titulo: '',
         anio_maestria: '',
@@ -199,14 +212,11 @@ export default {
         anio_especialidad1: '',
         anio_especialidad2: '',
       },
-      archivos: {},
-      esEdicion: false,
-      indiceEdicion: null,
-      numeroCaja: '',
-      anioEgreso: '',
-      observaciones: '',
-      grados: ["BACHILLER", "TITULO", "MAESTRIA", "DOCTORADO", "ESPECIALIDAD", "ESPECIALIDAD 2", "CONVALIDACION", "ALUMNO"],
+      codigoCajaPrefix: '', // Prefijo generado automáticamente
+      contadorCaja: 0,
+      codigoCajaSuffix: '', // Sufijo editable por el usuario
       tiposDocumento: ["ACTA", "RESOLUCION", "DIPLOMA", "DNI", "CERTIFICADO DE ESTUDIOS", "CONSTANCIA DE INGRESO"],
+      grados: ["BACHILLER", "TITULO", "MAESTRIA", "DOCTORADO", "ESPECIALIDAD", "ESPECIALIDAD 2", "CONVALIDACION", "ALUMNO"],
       aniosDisponibles: Array.from({ length: currentYear - 1965 + 1 }, (v, k) => currentYear - k),
       rules: {
         required: (value) => !!value || 'Este campo es requerido',
@@ -217,12 +227,39 @@ export default {
           const currentYear = new Date().getFullYear();
           return value === '' || (value.length === 4 && /^\d+$/.test(value) && value >= 1965 && value <= currentYear) || `Debe ser un número de 4 dígitos entre 1965 y ${currentYear}`;
         },
-        //boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
+        // boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
       },
       snackbar: false,
       snackbarText: '',
       snackbarTimeout: 3000
     };
+  },
+  watch: {
+    'alumno.nombre': function (newName) {
+      const words = newName.trim().split(/\s+/);
+      if (words.length >= 3) {
+        const antepenultimateWord = words[words.length - 2];
+        this.codigoCajaPrefix = antepenultimateWord.charAt(0).toUpperCase();
+      } else if (words.length >= 1) {
+        this.codigoCajaPrefix = words[0].charAt(0).toUpperCase();
+      } else {
+        this.codigoCajaPrefix = '';
+      }
+    },
+    'codigoCajaSuffix': function (newSuffix) {
+      if (newSuffix) {
+        this.consultarContadorCaja();
+      }
+    },
+    'contadorCaja': function (newCount) {
+      if (newCount >= 50) { // Verificar si la caja está llena
+        this.advertenciaCajaLlena = true;
+        this.showSnackbar("La caja actual está llena. Por favor, asigne un nuevo número de caja.");
+      } else {
+        this.advertenciaCajaLlena = false;
+      }
+    }
+
   },
   methods: {
     onFileSelected(event) {
@@ -262,16 +299,16 @@ export default {
           matricula_code: this.alumno.matricula_code,
           nombre: this.alumno.nombre,
           carrera: this.alumno.carrera,
-          anio_egreso: this.anioEgreso,
-          caja: this.numeroCaja.toUpperCase(),
-          observaciones: this.observaciones,
+          caja: `${this.codigoCajaPrefix}-${this.codigoCajaSuffix}`.toUpperCase(), // Concatenación del prefijo y sufijo
+          observaciones: this.alumno.observaciones,
           // Verificar si cada campo de grado está presente, de lo contrario asignar null
-          anio_bachiller: this.grados.anio_bachiller || null,
-          anio_titulo: this.grados.anio_titulo || null,
-          anio_maestria: this.grados.anio_maestria || null,
-          anio_doctorado: this.grados.anio_doctorado || null,
-          anio_especialidad1: this.grados.anio_especialidad1 || null,
-          anio_especialidad2: this.grados.anio_especialidad2 || null,
+          anio_bachiller: this.gradosData.anio_bachiller || null,
+          anio_titulo: this.gradosData.anio_titulo || null,
+          anio_maestria: this.gradosData.anio_maestria || null,
+          anio_doctorado: this.gradosData.anio_doctorado || null,
+          anio_especialidad1: this.gradosData.anio_especialidad1 || null,
+          anio_especialidad2: this.gradosData.anio_especialidad2 || null,
+          num_registros_caja: this.contadorCaja,// Enviar el contador de la caja
         };
 
         axios.post(url, alumnoData)
@@ -292,7 +329,7 @@ export default {
     completarRegistro() {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
-        formData.append('dni', this.alumno.dni);
+        formData.append('nombre', this.alumno.nombre); // Cambiado para enviar el nombre del alumno
 
         // Iterando sobre archivosList en lugar de Object.keys(this.archivos)
         this.archivosList.forEach((archivo, index) => {
@@ -319,13 +356,24 @@ export default {
       });
     },
 
+    //nuevooo
+    async consultarContadorCaja() {
+      if (!this.codigoCajaSuffix) {
+        return;
+      }
+      try {
+        const response = await axios.get(`/api/contador_caja/${this.codigoCajaSuffix}`);
+        this.contadorCaja = response.data.num_registros_caja;
+      } catch (error) {
+        console.error('Error al consultar el contador de la caja:', error);
+      }
+    },
+
     abrirDialogoParaEditar(index) {
       this.archivo = { ...this.archivosList[index] };
       this.esEdicion = true;
       this.indiceEdicion = index;
       this.dialog = true;
-
-
     },
 
     agregarEditarArchivo() {
@@ -381,3 +429,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.file-input {
+  width: 100%;
+  margin-top: 16px;
+}
+</style>
