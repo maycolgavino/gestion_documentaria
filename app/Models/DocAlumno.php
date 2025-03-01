@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class DocAlumno extends Model
 {
     protected $table = 'doc_alumno';
-    protected $fillable = ['dni', 'grado', 'tipo', 'ruta'];
+    protected $fillable = ['alumno_id', 'grado', 'tipo', 'ruta'];
 
     // Relación con Alumno
     public function alumno()
     {
-        return $this->belongsTo(Alumno::class, 'dni', 'dni');
+        return $this->belongsTo(Alumno::class, 'alumno_id', 'id');
     }
+    
 }

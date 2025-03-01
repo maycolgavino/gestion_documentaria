@@ -27,6 +27,11 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "vuetify": "^3.6.6"
+        "chart.js": "^4.4.8",
+        "html2canvas": "^1.4.1",
+        "jspdf": "^3.0.0",
+        "puppeteer": "^24.3.0",
+        "vuetify": "^3.6.6",
+        "xlsx": "^0.18.5"
     }
 }

@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\DocumentAcademicController;
 use App\Http\Controllers\SyllabusController;
 use App\Http\Controllers\AdministrativeController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,13 +32,17 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //<!-- Academic Search -->
-    
+
     Route::get('/completeform_acad', function () {
         return Inertia::render('Academic/CompleteAcad');
     })->name('complete_registro_acad');
@@ -105,6 +110,17 @@ Route::middleware('auth')->group(function () {
     })->name('agregar_silabo');
     Route::post('/register_sb', [SyllabusController::class, 'registerSilabo']);
     Route::post('/upload_sb', [SyllabusController::class, 'uploadSyllabus']);
+
+    //PARA DASHBOARD
+    Route::get('/report_dashboard', function () {
+        return Inertia::render('Syllabus/Report');
+    })->name('reportes');
+
+    Route::prefix('alumnos_incompletos')->group(function () {
+        Route::get('/', [DashboardController::class, 'alumnosIncompletos']);
+        Route::get('/pdf', [DashboardController::class, 'generarPDF']);
+    });
+
 });
 
 require __DIR__ . '/auth.php';

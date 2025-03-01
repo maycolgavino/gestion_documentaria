@@ -1,8 +1,8 @@
 <template>
     <v-card class="mx-auto" max-width="944" variant="flat">
         <v-container>
-            <v-text-field v-model="searchAlum" dense placeholder="Buscar por DNI, Código de Matricula, Nombre Completo" prepend-inner-icon="mdi-magnify"
-                variant="outlined" @keyup.enter="buscarAlumno" >
+            <v-text-field v-model="searchAlum" dense placeholder="Buscar por DNI, Código de Matricula, Nombre Completo"
+                prepend-inner-icon="mdi-magnify" variant="outlined" @keyup.enter="buscarAlumno">
             </v-text-field>
             <div class="d-flex justify-center">
                 <v-btn class="mr-4 text-none text-subtitle-1" variant="elevated" color="blue-darken-3"
@@ -66,7 +66,8 @@
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title class="font-weight-bold">Código de Matricula:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Código de
+                                                Matricula:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.matricula_code }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
@@ -81,48 +82,48 @@
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Bachiller:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de
+                                                Bachiller:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_bachiller }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Titulo:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de
+                                                Titulo:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_titulo }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Maestria:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de
+                                                Maestria:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_maestria }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Doctorado:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de
+                                                Doctorado:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_doctorado }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Especialidad 1:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de Especialidad
+                                                1:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_especialidad1 }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
 
                                     <v-list-item>
                                         <v-list-item-content>
-                                            <v-list-item-title
-                                                class="font-weight-bold">Año de Especialidad 2:</v-list-item-title>
+                                            <v-list-item-title class="font-weight-bold">Año de Especialidad
+                                                2:</v-list-item-title>
                                             <v-list-item-subtitle>{{ alumno.anio_especialidad2 }}</v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
@@ -132,8 +133,8 @@
                         </tr>
                     </thead>
                     <v-btn icon @click="openDialog" class="justify-center">
-                    <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
                 </v-table>
                 <!-- Dialogo para editar los campos -->
                 <v-dialog v-model="Editdialog" max-width="600px">
@@ -146,15 +147,19 @@
                                 <v-text-field label="DNI" v-model="editedStudent.dni"></v-text-field>
                                 <v-text-field label="Código de Matrícula"
                                     v-model="editedStudent.matricula_code"></v-text-field>
-                                <v-text-field label="Año de Egreso" v-model="editedStudent.anio_egreso"></v-text-field>
                                 <v-text-field label="Caja de Documentos" v-model="editedStudent.caja"></v-text-field>
 
-                                <v-text-field label="Año de Bachiller" v-model="editedStudent.anio_bachiller"></v-text-field>
+                                <v-text-field label="Año de Bachiller"
+                                    v-model="editedStudent.anio_bachiller"></v-text-field>
                                 <v-text-field label="Año de Titulo" v-model="editedStudent.anio_titulo"></v-text-field>
-                                <v-text-field label="Año de Maestria" v-model="editedStudent.anio_maestria"></v-text-field>
-                                <v-text-field label="Año de Doctorado" v-model="editedStudent.anio_doctorado"></v-text-field>
-                                <v-text-field label="Año de Especialidad 1" v-model="editedStudent.anio_especialidad1"></v-text-field>
-                                <v-text-field label="Año de Especialidad 2" v-model="editedStudent.anio_especialidad2"></v-text-field>
+                                <v-text-field label="Año de Maestria"
+                                    v-model="editedStudent.anio_maestria"></v-text-field>
+                                <v-text-field label="Año de Doctorado"
+                                    v-model="editedStudent.anio_doctorado"></v-text-field>
+                                <v-text-field label="Año de Especialidad 1"
+                                    v-model="editedStudent.anio_especialidad1"></v-text-field>
+                                <v-text-field label="Año de Especialidad 2"
+                                    v-model="editedStudent.anio_especialidad2"></v-text-field>
 
                                 <v-textarea label="Observaciones" v-model="editedStudent.observaciones"></v-textarea>
 
@@ -332,6 +337,15 @@ export default {
             snackbarTimeout: 3000
         };
     },
+    watch: {
+        editedStudent: {
+            handler: async function () {
+                // Actualizar datos del alumno automáticamente cuando cambian los valores
+                await this.actualizarDatosAlumno();
+            },
+            deep: true
+        }
+    },
     methods: {
 
         async dialogoCompleto() {
@@ -340,36 +354,37 @@ export default {
 
         async completarRegistro() {
             this.confirmDialogComplete = false;
-            return new Promise((resolve, reject) => {
+            try {
                 const formData = new FormData();
-                formData.append('dni', this.alumno.dni);
+                formData.append('alumno_id', this.alumno.id); // Enviar el ID del alumno
 
+                // Añadir los documentos nuevos al formulario
                 this.archivosListNew.forEach((documento, index) => {
                     formData.append(`documentos[${index}][documento]`, documento.nombreArchivo);
                     formData.append(`documentos[${index}][grado]`, documento.grado);
                     formData.append(`documentos[${index}][tipo]`, documento.tipoDocumento);
                 });
 
+                // Añadir los documentos a eliminar al formulario
                 this.archivosParaEliminar.forEach((id, index) => {
                     formData.append(`archivoParaEliminar[${index}]`, id);
                 });
 
-                const uploadUrl = '/update_documents'; // Ajusta la URL según tu API
-                axios.post(uploadUrl, formData, {
+                const uploadUrl = '/update_documents'; // URL del método updateDocuments en el servidor
+                const response = await axios.post(uploadUrl, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     }
-                })
-                    .then(response => {
-                        window.location.href = '/completeform_acad';
-                        resolve(response);
-                    })
-                    .catch(error => {
-                        this.showSnackbar("Error durante la subida de documentos. Por favor, inténtalo de nuevo.");
-                        console.error('Error durante la subida de documentos:', error);
-                        reject(error);
-                    });
-            });
+                });
+
+                // Mostrar mensaje de éxito y redirigir si es necesario
+                this.showSnackbar("Documentos actualizados exitosamente.");
+                window.location.href = '/completeform_acad';
+            } catch (error) {
+                // Mostrar mensaje de error
+                this.showSnackbar("Error durante la subida de documentos. Por favor, inténtalo de nuevo.");
+                console.error('Error durante la subida de documentos:', error);
+            }
         },
         openDialog() {
             // Clonar los datos del estudiante actual para editarlos en el dialog
@@ -381,8 +396,13 @@ export default {
         },
         async saveChanges() {
             try {
+
                 // Aquí puedes llamar a tu controlador para guardar los datos actualizados
                 await this.saveStudentData();
+
+                // Actualizar los datos del alumno en tiempo real
+                await this.actualizarDatosAlumno();
+
                 this.Editdialog = false;
                 this.snackbarSuccess = true; // Mostrar mensaje de éxito
             } catch (error) {
@@ -390,20 +410,37 @@ export default {
                 this.snackbarError = true; // Mostrar mensaje de error
             }
         },
+
         async saveStudentData() {
             // Asegúrate de que la URL y el método HTTP sean correctos según tu API
             const updateUrl = '/update_student';
             const response = await axios.post(updateUrl, this.editedStudent);
             return response.data;
         },
+
+        async actualizarDatosAlumno() {
+            try {
+                const response = await axios.get(`/acad_details`, { params: { search: this.alumno.id } });
+                if (response.data.alumno) {
+                    this.alumno = response.data.alumno;
+                    this.archivosList = response.data.documentos;
+                }
+            } catch (error) {
+                console.error('Error al actualizar los datos del alumno:', error);
+            }
+        },
         buscarAlumno() {
-            axios.get(`/acad_details`, { params: { search: this.searchAlum } })
+            axios.get(`/api/acad_details`, { params: { search: this.searchAlum } })
                 .then(response => {
                     if (response.data.alumno) {
                         this.alumno = response.data.alumno;
                         this.archivosList = response.data.documentos;
                         this.snackbarError = false; // Oculta el snackbar de error
                         this.snackbarSuccess = true; // Muestra el snackbar de éxito
+                        this.$nextTick(() => {
+                            // Asegurar que los datos actualizados se muestren correctamente
+                            this.alumno = { ...response.data.alumno };
+                        });
                     } else {
                         this.alumno = null;
                         this.archivosList = [];
@@ -417,6 +454,7 @@ export default {
                     this.snackbarSuccess = false; // Oculta el snackbar de éxito
                 });
         },
+
         onFileSelected(event) {
             this.documento.nombreArchivo = event.target.files[0];
         },

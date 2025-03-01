@@ -13,35 +13,63 @@ use PhpParser\Comment\Doc;
 
 class DocumentAcademicController extends Controller
 {
+
+
+    // Método para obtener el último valor del contador de una caja específica
+    public function obtenerContadorCaja($codigoCajaSuffix)
+    {
+        // Busca el último valor de 'num_registros_caja' para una caja específica
+        $ultimoRegistro = Alumno::where('caja', 'LIKE', "%-$codigoCajaSuffix")
+            ->orderBy('num_registros_caja', 'desc')
+            ->first();
+
+        // Si no se encuentra ningún registro, se retorna 0 como valor inicial
+        $contador = $ultimoRegistro ? $ultimoRegistro->num_registros_caja : 0;
+
+        return response()->json(['num_registros_caja' => $contador]);
+    }
+
+    // Método para registrar un alumno con los datos proporcionados
     public function registerStudent(Request $request)
     {
         $validatedData = $request->validate([
-            'dni' => 'required|string|unique:alumno,dni',
-            'matricula_code' => 'required|string|unique:alumno,matricula_code',
+            'dni' => 'required|string',
+            'matricula_code' => 'nullable|string',
             'nombre' => 'required|string',
             'carrera' => 'required|string',
-            'anio_egreso' => 'required|integer',
             'caja' => 'required|string',
             'observaciones' => 'nullable|string',
             // Validaciones para los grados académicos
-            'anio_bachiller' => 'nullable|integer',
-            'anio_titulo' => 'nullable|integer',
-            'anio_maestria' => 'nullable|integer',
-            'anio_doctorado' => 'nullable|integer',
-            'anio_especialidad1' => 'nullable|integer',
-            'anio_especialidad2' => 'nullable|integer',
+            'anio_bachiller' => 'nullable',
+            'anio_titulo' => 'nullable',
+            'anio_maestria' => 'nullable',
+            'anio_doctorado' => 'nullable',
+            'anio_especialidad1' => 'nullable',
+            'anio_especialidad2' => 'nullable',
+            'num_registros_caja' => 'required|integer',
         ]);
 
-        $userEmail = auth()->user()->email; // Asegurarse de que el usuario está autenticado.
+        // Asignar valores predeterminados para dni y matricula_code si están vacíos
+        $dni = $validatedData['dni'];
+        $matricula_code = $validatedData['matricula_code'] ?? '0000000000'; // 10 ceros si no se proporciona el código de matrícula
+
+        // Verificar si el DNI no es ceros y ya existe un alumno con el mismo dni
+        if ($dni !== '00000000' && Alumno::where('dni', $dni)->exists()) {
+            return response()->json(['error' => 'El DNI ya está registrado en el sistema.'], 400);
+        }
+
+        // Verificar si el código de matrícula no es ceros y ya existe un alumno con el mismo código de matrícula
+        if ($matricula_code !== '0000000000' && Alumno::where('matricula_code', $matricula_code)->exists()) {
+            return response()->json(['error' => 'El código de matrícula ya está registrado en el sistema.'], 400);
+        }
 
         try {
             // Guardar al alumno
             $alumno = Alumno::create([
-                'dni' => $validatedData['dni'],
+                'dni' => $dni,
                 'nombre' => strtoupper($validatedData['nombre']),
-                'matricula_code' => strtoupper($validatedData['matricula_code']),
+                'matricula_code' => strtoupper($matricula_code),
                 'carrera' => strtoupper($validatedData['carrera']),
-                'anio_egreso' => $validatedData['anio_egreso'],
                 'caja' => strtoupper($validatedData['caja']),
                 'observaciones' => strtoupper($validatedData['observaciones']),
                 'anio_bachiller' => $validatedData['anio_bachiller'],
@@ -50,8 +78,8 @@ class DocumentAcademicController extends Controller
                 'anio_doctorado' => $validatedData['anio_doctorado'],
                 'anio_especialidad1' => $validatedData['anio_especialidad1'],
                 'anio_especialidad2' => $validatedData['anio_especialidad2'],
+                'num_registros_caja' => $validatedData['num_registros_caja'] + 1, // Incrementar el contador
             ]);
-
 
             return response()->json(['message' => 'Registro de alumno y grados exitoso.', 'data' => $alumno], 201);
         } catch (\Exception $e) {
@@ -59,80 +87,89 @@ class DocumentAcademicController extends Controller
         }
     }
 
-
     public function uploadDocuments(Request $request)
     {
         $validatedData = $request->validate([
-            'dni' => 'required|string|exists:alumno,dni',
+            'nombre' => 'required|string|exists:alumno,nombre',
             'documentos' => 'required|array',
             'documentos.*.tipo' => 'required|string',
             'documentos.*.grado' => 'required|string',
             'documentos.*.documento' => 'required|file',
         ]);
-
+    
         try {
-            $alumno = Alumno::where('dni', $validatedData['dni'])->firstOrFail();
-
+            // Obtener el alumno por el nombre proporcionado
+            $alumno = Alumno::where('nombre', $validatedData['nombre'])->first();
+    
+            // Verificar que se encontró un alumno
+            if (!$alumno) {
+                return response()->json(['error' => 'No se encontró un alumno con el nombre proporcionado.'], 404);
+            }
+    
+            $alumnoId = $alumno->id; // Obtener el ID del alumno
+    
             foreach ($validatedData['documentos'] as $doc) {
-                //$documentoFile = $doc['documento'];
                 $documentoFile = $doc['documento'];
-
-                // Construye el nombre del archivo usando el tipo, grado y DNI del alumno
-                $nombreArchivo = $doc['tipo'] . '_' . $doc['grado'] . '_' . $alumno->dni . '.pdf';
-
+    
+                // Construye el nombre del archivo usando el tipo, grado y nombre del alumno
+                $nombreArchivo = $doc['tipo'] . '_' . $doc['grado'] . '_' . $alumno->nombre . '.pdf';
+    
                 // Guarda el archivo en el disco 'public' y en la carpeta especificada con el nombre construido
-                $ruta = $documentoFile->storeAs('public/documentos/academicos/' . $alumno->dni, $nombreArchivo);
-                // $ruta = Storage::putFile('documentos/academicos/' . $alumno->dni, $documentoFile );
-
+                $ruta = $documentoFile->storeAs('public/documentos/academicos/' . $alumno->nombre, $nombreArchivo);
+    
+                // Crear el registro del documento asociado al alumno
                 DocAlumno::create([
-                    'dni' => $alumno->dni,
+                    'alumno_id' => $alumnoId, // Rellenar con el ID del alumno
                     'grado' => strtoupper($doc['grado']),
                     'tipo' => strtoupper($doc['tipo']),
                     'ruta' => $ruta,
                 ]);
             }
-
+    
             return response()->json(['message' => 'Documentos subidos exitosamente.'], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al subir documentos: ' . $e->getMessage()], 500);
         }
     }
+    
+    
 
     public function getAcadDetails(Request $request)
     {
         $search = $request->query('search');
         $alumno = null;
         $documentos = [];
-
-        // Buscar al alumno en las columnas 'dni', 'matricula_code' y 'nombre'
+    
+        // Buscar al alumno en las columnas 'id', 'matricula_code' y 'nombre'
         $alumno = Alumno::where('dni', $search)
             ->orWhere('matricula_code', $search)
             ->orWhere('nombre', 'like', "%{$search}%")
             ->first();
-
+    
         // Si se encuentra un alumno, buscar los documentos asociados
         if ($alumno) {
-            $documentos = DocAlumno::where('dni', $alumno->dni)->get();
+            $documentos = DocAlumno::where('alumno_id', $alumno->id)->get();
         }
-
+    
         return response()->json([
             'alumno' => $alumno,
             'documentos' => $documentos
         ]);
     }
+    
     public function downloadAcadDocument($id)
     {
         try {
-            // Encuentra el detalle del sílabo usando el ID
+            // Encuentra el detalle del documento usando el ID
             $detail = DocAlumno::findOrFail($id);
             // Construye la ruta completa al archivo
             $pathToFile = storage_path('app/' . $detail->ruta);
-
+    
             // Comprueba si el archivo existe
             if (!file_exists($pathToFile)) {
                 return response()->json(['message' => 'File not found.'], 404);
             }
-
+    
             // Devuelve el archivo para su descarga
             return response()->download($pathToFile);
         } catch (\Exception $e) {
@@ -153,49 +190,42 @@ class DocumentAcademicController extends Controller
             'matricula_code' => 'required|string',
             'nombre' => 'required|string',
             'carrera' => 'required|string',
-            'anio_egreso' => 'required|integer',
             'caja' => 'required|string',
             'observaciones' => 'nullable|string',
             // Validaciones para los grados académicos
-            'anio_bachiller' => 'nullable|integer',
-            'anio_titulo' => 'nullable|integer',
-            'anio_maestria' => 'nullable|integer',
-            'anio_doctorado' => 'nullable|integer',
-            'anio_especialidad1' => 'nullable|integer',
-            'anio_especialidad2' => 'nullable|integer', 
+            'anio_bachiller' => 'nullable',
+            'anio_titulo' => 'nullable',
+            'anio_maestria' => 'nullable',
+            'anio_doctorado' => 'nullable',
+            'anio_especialidad1' => 'nullable',
+            'anio_especialidad2' => 'nullable',
         ]);
-
+    
         $newDni = strtoupper($validatedData['dni']);
         $alumnoId = $validatedData['id'];
-
+    
         DB::beginTransaction();
-
+    
         try {
             // Encontrar al alumno por su ID
             $alumno = Alumno::findOrFail($alumnoId);
-
-            // Verificar si el nuevo DNI ya está en uso
-            $existingAlumno = Alumno::where('dni', $newDni)->where('id', '!=', $alumnoId)->first();
-            if ($existingAlumno) {
-                throw new \Exception('El nuevo DNI ya está en uso.');
+    
+            // Verificar si el nuevo DNI ya está en uso, pero solo si ha cambiado
+            if ($alumno->dni !== $newDni) {
+                $existingAlumno = Alumno::where('dni', $newDni)->where('id', '!=', $alumnoId)->first();
+                if ($existingAlumno) {
+                    throw new \Exception('El nuevo DNI ya está en uso.');
+                }
             }
-
-            // Buscar los documentos asociados al DNI antiguo
-            $documentosAntiguos = DocAlumno::where('dni', $alumno->dni)->get();
-
-            // Eliminar los documentos asociados al DNI antiguo
-            DocAlumno::where('dni', $alumno->dni)->delete();
-
+    
             // Actualizar los datos del alumno
             $alumno->update([
                 'dni' => $newDni,
                 'nombre' => strtoupper($validatedData['nombre']),
                 'carrera' => strtoupper($validatedData['carrera']),
-                'anio_egreso' => $validatedData['anio_egreso'],
                 'matricula_code' => $validatedData['matricula_code'],
                 'caja' => strtoupper($validatedData['caja']),
                 'observaciones' => strtoupper($validatedData['observaciones']),
-
                 'anio_bachiller' => $validatedData['anio_bachiller'],
                 'anio_titulo' => $validatedData['anio_titulo'],
                 'anio_maestria' => $validatedData['anio_maestria'],
@@ -203,34 +233,25 @@ class DocumentAcademicController extends Controller
                 'anio_especialidad1' => $validatedData['anio_especialidad1'],
                 'anio_especialidad2' => $validatedData['anio_especialidad2'],
             ]);
-
-            // Insertar los documentos con el nuevo DNI
-            foreach ($documentosAntiguos as $documento) {
-                DocAlumno::create([
-                    'dni' => $newDni,
-                    'grado' => $documento->grado,
-                    'tipo' => $documento->tipo,
-                    'ruta' => $documento->ruta,
-                ]);
-            }
-
+    
             // Confirmar la transacción
             DB::commit();
-
-            return response()->json(['message' => 'Datos del alumno y documentos actualizados exitosamente.', 'data' => $alumno], 200);
+    
+            return response()->json(['message' => 'Datos del alumno actualizados exitosamente.', 'data' => $alumno], 200);
         } catch (\Exception $e) {
             // Revertir la transacción en caso de error
             DB::rollBack();
-
+    
             return response()->json(['error' => 'Error al actualizar los datos: ' . $e->getMessage()], 500);
         }
     }
+    
 
 
     public function updateDocuments(Request $request)
     {
         $validatedData = $request->validate([
-            'dni' => 'required|string|exists:alumno,dni',
+            'alumno_id' => 'required|integer|exists:alumno,id',
             'documentos' => 'required|array',
             'documentos.*.tipo' => 'required|string',
             'documentos.*.grado' => 'required|string',
@@ -243,14 +264,14 @@ class DocumentAcademicController extends Controller
             // Iniciar una transacción para garantizar la atomicidad
             DB::beginTransaction();
 
-            // Buscamos al alumno por su DNI
-            $alumno = Alumno::where('dni', $validatedData['dni'])->firstOrFail();
+            // Buscamos al alumno por su ID
+            $alumno = Alumno::findOrFail($validatedData['alumno_id']);
 
             // Eliminación de documentos especificados
             if (!empty($validatedData['archivoParaEliminar'])) {
                 foreach ($validatedData['archivoParaEliminar'] as $docId) {
                     $doc = DocAlumno::find($docId);
-                    if ($doc && $doc->dni === $alumno->dni) {
+                    if ($doc && $doc->alumno_id === $alumno->id) {
                         // Verificar la existencia del archivo antes de eliminar
                         if (Storage::exists($doc->ruta)) {
                             // Elimina el archivo del sistema de archivos
@@ -276,15 +297,15 @@ class DocumentAcademicController extends Controller
             foreach ($validatedData['documentos'] as $doc) {
                 $documentoFile = $doc['documento'];
 
-                // Construimos el nombre del archivo usando el tipo, grado y DNI del alumno
-                $nombreArchivo = $doc['tipo'] . '_' . $doc['grado'] . '_' . $alumno->dni . '.' . $documentoFile->getClientOriginalExtension();
+                // Construimos el nombre del archivo usando el tipo, grado y nombre del alumno
+                $nombreArchivo = $doc['tipo'] . '_' . $doc['grado'] . '_' . $alumno->nombre . '.' . $documentoFile->getClientOriginalExtension();
 
                 // Guardamos el archivo en el disco 'public' y en la carpeta especificada con el nombre construido
-                $ruta = $documentoFile->storeAs('public/documentos/academicos/' . $alumno->dni, $nombreArchivo);
+                $ruta = $documentoFile->storeAs('public/documentos/academicos/' . $alumno->nombre, $nombreArchivo);
 
                 // Creamos un nuevo registro en la tabla DocAlumno
                 DocAlumno::create([
-                    'dni' => $alumno->dni,
+                    'alumno_id' => $alumno->id,
                     'grado' => strtoupper($doc['grado']),
                     'tipo' => strtoupper($doc['tipo']),
                     'ruta' => $ruta,

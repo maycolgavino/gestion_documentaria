@@ -22,14 +22,12 @@ return new class extends Migration
         });
         Schema::create('alumno', function (Blueprint $table) {
             $table->id();
-            $table->string('dni')->unique(); // Usando string por si el DNI tiene ceros al principio
-            $table->string('matricula_code'); // Usando string por si el DNI tiene ceros al principio
-            //$table->string('email'); // Clave foránea que se relacionará con users
+            $table->string('dni'); // Usando string por si el DNI tiene ceros al principio, agregado index para clave foránea
+            $table->string('matricula_code'); // Usando string por si el código de matrícula tiene ceros al principio
             $table->string('nombre');
             $table->string('carrera');
-            $table->timestamps(); // Opcional, si deseas tener control sobre las fechas de creación/actualización
-            $table->year('anio_egreso');
             $table->string('caja');
+            $table->integer('num_registros_caja')->default(0); // Nueva columna para contar registros por caja
             $table->text('observaciones')->nullable();
             $table->year('anio_bachiller')->nullable();
             $table->year('anio_titulo')->nullable();
@@ -37,19 +35,19 @@ return new class extends Migration
             $table->year('anio_doctorado')->nullable();
             $table->year('anio_especialidad1')->nullable();
             $table->year('anio_especialidad2')->nullable();
-            //$table->foreign('email')->references('email')->on('users');
+            $table->timestamps();
         });
 
         Schema::create('doc_alumno', function (Blueprint $table) {
             $table->id(); // Auto-incremental y clave primaria
-            $table->string('dni'); // Clave foránea que referencia al DNI del alumno
+            $table->unsignedBigInteger('alumno_id'); // Clave foránea que referencia al ID del alumno
             $table->string('grado');
             $table->string('tipo');
             $table->string('ruta'); // Almacena la ruta del archivo
             $table->timestamps(); // created_at y updated_at
-            $table->foreign('dni')->references('dni')->on('alumno')->onDelete('cascade');
-        });
 
+            $table->foreign('alumno_id')->references('id')->on('alumno')->onDelete('cascade'); // Relación con la tabla alumno
+        });
 
         Schema::create('silabo', function (Blueprint $table) {
             $table->id();
