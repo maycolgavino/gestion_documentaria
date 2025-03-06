@@ -93,6 +93,7 @@
         </v-col>
       </v-row>
 
+
       <v-row>
         <v-col cols="12" md="4">
           <v-text-field
@@ -412,6 +413,7 @@ export default {
           )
         },
         // boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
+        // boxCode: (value) => /^[A-Za-z]\d$/.test(value) || 'Debe ser un carácter de letra seguido de un número',
       },
       snackbar: false,
       snackbarText: '',
@@ -492,6 +494,8 @@ export default {
           matricula_code: this.alumno.matricula_code,
           nombre: this.alumno.nombre,
           carrera: this.alumno.carrera,
+          caja: `${this.codigoCajaPrefix}-${this.codigoCajaSuffix}`.toUpperCase(), // Concatenación del prefijo y sufijo
+          observaciones: this.alumno.observaciones,
           caja: `${this.codigoCajaPrefix}-${this.codigoCajaSuffix}`.toUpperCase(), // Concatenación del prefijo y sufijo
           observaciones: this.alumno.observaciones,
           // Verificar si cada campo de grado está presente, de lo contrario asignar null
@@ -638,6 +642,13 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.file-input {
+  width: 100%;
+  margin-top: 16px;
+}
+</style>
 
 <style scoped>
 .file-input {
