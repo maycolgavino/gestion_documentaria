@@ -1,6 +1,6 @@
-# Gestión Documentaria - Archivo Central UNDAC
+# Gestión Documentaria (Proyecto de Práticas Preprofesionales)
 
-Sistema web para la gestión documentaria del Archivo Central de la Universidad Nacional Daniel Alcides Carrión (UNDAC). Permite administrar, registrar y consultar documentos de manera eficiente y centralizada.
+Sistema web para la gestión documentaria del Archivo Central. Permite administrar, registrar y consultar documentos de manera eficiente y centralizada.
 
 ## Características principales
 
