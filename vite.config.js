@@ -21,7 +21,7 @@ export default defineConfig({
         host: '0.0.0.0',  // Esto permite que el servidor escuche en todas las interfaces
         port: 5173,        // Puedes cambiar el puerto si lo deseas
         hmr: {
-            host: '192.168.18.22',  // Reemplaza con tu IP local
+            host: '192.168.18.32',  // Reemplaza con tu IP local
         },
     },
 });

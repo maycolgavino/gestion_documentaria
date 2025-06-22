@@ -11,9 +11,7 @@ const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
-    <v-parallax
-        src="/images/background.jpg"
-        height="480vh">
+    <v-parallax src="/images/background.jpg" height="480vh">
         <div>
             <div class="min-h-screen">
                 <nav class="bg-dark dark:bg-blue-700 ">
@@ -25,7 +23,7 @@ const showingNavigationDropdown = ref(false);
                                 <div class="shrink-0 flex items-center">
                                     <Link :href="route('dashboard')">
                                     <v-avatar size="50">
-                                        <img src="/images/undac_logo.png" alt="avatar">
+                                        <img src="/images/logo.png" alt="avatar">
                                     </v-avatar>
                                     </Link>
                                 </div>
